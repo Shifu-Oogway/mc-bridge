@@ -9,6 +9,18 @@ base { archivesName = "${mod_id}-neoforge-${minecraft_version}" }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
+repositories {
+    maven { url = 'https://maven.createmod.net' }   // Create, Ponder, Flywheel
+}
+
+dependencies {
+    // Create is optional at runtime: the pack provides it, and the bridge only touches
+    // Create classes after ModList confirms it is loaded. Compile against the exact installed version.
+    compileOnly("com.simibubi.create:create-1.21.1:${create_version}:slim") { transitive = false }
+    compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}") { transitive = false }
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:${flywheel_version}") { transitive = false }
+}
+
 neoForge {
     version = neo_version
     runs {
