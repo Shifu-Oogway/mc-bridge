@@ -1,0 +1,109 @@
+# Master Roadmap – Steampunk Industrial Metropolis
+Modpack: Create: Perfect World – Post Production (MC 1.21.1). Player: herochristian.
+
+## Ultimate objective
+Fully automated Victorian-steampunk industrial city (brass/copper/dark oak/spruce/stone brick, smokestacks, exposed shafts, rail, catwalks).
+
+## Current phase: 1 -> 2 (Establishment / Mechanical Infrastructure)
+Date started: 2026-11-03
+
+## Infrastructure established
+- Water wheel at (1096,61,-332), axis z, shaft 1096,61,-333 -> gearbox 1096,61,-334 -> shaft up to millstone (1096,63,-334).
+- Acacia village-like structures near (1107..1111, 64..67, -340) (existing; acacia is the local wood).
+- Advancements: Acquire Hardware, The Andesite Age.
+
+## Inventory snapshot (2026-11-03)
+stone pickaxe/axe, wooden pickaxe, 6 acacia log, 12 acacia slab, 21 cobble, 26 dirt, 13 gravel, 8 iron nuggets, 1 hand crank, 6 diorite, 1 andesite.
+
+## Milestones
+- [x] Wheel + millstone prototype
+- [x] P1 workshop (plans/steampunk-p1-workshop.json): DONE 2026-11-03 - 7x6 hall x1089..1095,z-336..-331, cobble walls, 8 glass windows, acacia slab roof y66, open doorway (1092,-331), 3 chests at (1090,63,-335),(1091,63,-335),(1093,63,-335). Door not hung (open-door leaf blocked movement; hang later or use fence gate). Dirt stair remains at x1088,z-331..-332.
+- [x] P2 power bank: DONE 2026-11-03 (simplified) - 3 water wheels coaxial at (1096,61,-332),(1096,61,-331),(1096,61,-330), axis z, flowing water over each (channels (1096..1097,62,-331..-330) fed from lake sources at x1098). Shaft (1096,61,-333) -> gearbox (1096,61,-334) -> millstone. Not yet verified under load. Engine-hall/visual dressing deferred.
+- [ ] P3 iron mining + ore processing (verify crushing/press recipes in jar first)
+- [ ] P4 wood/farm automation (saws, harvesters), central storage
+- [ ] P5 rail network, factories, brass/copper foundry
+- [ ] P6 skyline: smokestacks, HQ tower, catwalks
+
+## Session handoff (update at every milestone; start new sessions from here)
+- Last update: 2026-11-03. Position ~(1093,61,-345): small dug pit at the lone acacia tree site west of the village (zinc ore at 1093,60,-345 needs a better pickaxe). Village acacia buildings at x1098..1111,y63..68,z-339..-342 are NOT to be mined.
+- Holding: ~68 cobblestone, 13 acacia logs, stone pickaxe (hotbar 7) + stone axe.
+- P1 done: logs, tools, 64 cobble, 3 chests (in inventory). Crafting table placed in pit at (1097,57,-344) (temporary; relocate/replace in workshop).
+- Inventory now: 3 chest, 5 acacia log, 5 planks, 12 slab, 64+4 cobble, 13 gravel, 32 dirt.
+- 2026-11-03 later: climbed out of pit via dirt stair at x1095..1096,z-343 (exit to surface y63). Mined 8 sand with mc_mine allowFluids:true (gatherer refused water-adjacent sand; sand patch is at x1098..1106,y60..62,z-320..-331). Surface crafting table at (1093,63,-337), furnace at (1094,63,-338) smelting 8 sand -> glass (fuel: 12 acacia slabs). Note: mc_place fails if body overlaps target cell or without item param sometimes -> select hotbar then place without item. Pillar-jump (jump+use) did not work; use alternating-column dirt stairs.
+- MILESTONE 2026-11-03: P1 materials complete. Holding 8 glass, 3 chests, 60 cobble, 5 acacia logs, 30 dirt, stone pickaxe/axe. Furnace (1094,63,-338) + table (1093,63,-337) on surface, fuel nearly spent (1 slab). Surface y=62 grass (stand y63). Flat candidate workshop site: x1086..1092, z-337..-332 (verify with mc_terrain before building; avoid wheel at x1096).
+- NEXT: verify site, build 7x6 workshop (cobble walls, glass windows, chests inside), then P2 power bank. Remaining need: more logs/planks (door, roof), coal/iron search for P3.
+- MILESTONE 2026-11-03: Workshop SHELL built: x1089..1095, z-336..-331, floor y62 grass, cobble walls y63..65, 8 glass windows (y64), door gap at (1092,63..64,-331) south wall. NO roof/door/interior yet. Table (1093,63,-337) and furnace (1094,63,-338) sit outside the north wall.
+- mc_place tips (learned): re-select hotbar slot after every mc_mine (it switches to pickaxe); place without `item` param; target must be >=2 blocks away (not adjacent); clear short_grass/plants on target cell first; top faces above eye level need a raised stand (dirt steps) or place from outside; never wall yourself in.
+- Hotbar: 0 pickaxe,1 cobble,2 dirt,3 axe,4 log,5 (glass used),6.. chest at 7ish.
+- NEXT: gatherer fetches 16+ acacia logs (and 24 cobble); then roof (acacia slabs y66), door, 3 chests inside along north wall z-335, lanterns later.
+- (old) Next: gatherer fetches ~8 sand + coal/fuel + furnace (8 cobble) -> 8 glass; survey 7x6 flat site near x1092,z-338; build workshop.
+- Gathering goes to the `mc-gatherer` subagent (Haiku). Commands/cheats stay OFF.
+
+## P2 progress (2026-11-03)
+- Crafted: 2 create:water_wheel, 4 shafts, 2 cogwheels, 1 andesite alloy spare. Andesite is craftable: diorite + cobblestone -> 2 andesite (no mining needed; mined diorite/granite via gatherer). Alloy = 2 andesite + 2 nuggets; 2 alloy -> 8 shafts (1 craft). Have only 2 iron nuggets + 4 raw_iron (need furnace -> ingots -> nuggets for more alloy), 21 coal.
+- Inventory hotbar: 0 raw_iron,1 stone_pickaxe,2 dirt,3 axe,4 log,5 sapling,6 banner,7 coal,8 planks. KEEP pickaxe in hotbar (crafting table insert pushed it out and mining failed 'no tool can harvest').
+- Underground: gatherer's tunnel y51 x1091..1102,z-340; table at (1098,51,-340) and (1090,52,-339); shaft x1090,z-340 y52..63; iron pocket x1101..1102,y48..51 (dirt pillar at 1101,48..50).
+- Pillar jump+use works ONLY in a 1-wide shaft with >=3 headroom and body centred in cell (x.5).
+- DONE: 3 coaxial wheels (see milestones). To place a wheel facing along z: aim at the south face of the previous wheel via mc_look at (x+.5,61.5,z+0.02 edge) from a spot ~3 blocks south above a dug hole, then mc_interact use (mc_place can't choose the face). NEVER leave water_wheel in hotbar slot you think is dirt: verify held item before jump+use pillar.
+- 2026-11-03: smelted 4 raw iron -> 4 iron ingots (in hotbar) at furnace (1094,63,-338). create:mechanical_press has a 3x3 crafting recipe; create:crushing_wheel and create:andesite_casing have NO plain crafting recipe (casing = alloy on stripped log; crushing wheel likely sequenced/other). The mods folder in D:\Minecraft\mc-bridge\run\mods is empty so jar can't be inspected there.
+- Gatherer lessons: it refuses water-adjacent ore unless told allowFluids:true; tell it explicitly.
+- 2026-11-03 SAFETY: gatherer + I nearly drowned at y43-46 near x1093..1101,z-343 (lake pocket). Lake lies east of x1094 at y43; shafts x1097,z-344 (y47-58) and x1094,z-344 (y43-47) are FLOODED. AVOID the underground x>=1094 below y48. I escaped via my own shaft x1093,z-343 y43..60 (dirt pillar column, now partly filled). Raw iron 7 + 4 ingots in hand. Dry ore reported near x1106-1108,y32-38,z-337..-348 (untested). Never run game commands while a gatherer is active; check hp.
+- MILESTONE 2026-11-03: CRAFTED create:mechanical_press (recipe: andesite_casing + shaft + iron_block). Andesite casing = right-click stripped log with andesite alloy (strip log with axe first), then mine it back. 2 iron ingots + 2 nuggets left, 19 coal, 3 shafts, 2 cogwheels, 2 crafting tables (one placed at 1091,64,-343), furnace at (1094,63,-338) holds nothing.
+- NEXT STEPS (P3): (1) design press line near workshop east side: shaft from the gearbox power line (1096,61,-334) -> press over a depot/belt; need create:depot (recipe unknown - probe with mc_craft at table), (2) more iron (dry ore at x1106-1108,y32-38 untested; AVOID lake pocket), (3) hang workshop door, store surplus granite/gravel in chests.
+- (old) NEXT: P3 - iron ore processing. Have 4 raw_iron, 21 coal, 1 crafting table. Need furnace (8 cobble), smelt iron, then andesite alloy/nuggets; verify Create press/crushing recipes in jar (see roadmap.json unverified list).
+- Remaining spare: 4 shafts, 2 cogwheels, 1 alloy, 1 crafting table, 3 acacia doors, 6 acacia slabs, 41 cobble, 8 logs.
+
+## Resources found (2026-11-03)
+- Iron ore: plentiful underground: (1089,47..48,-325), (1101..1102,48..50,-340..-339) (one exposed at 1102,48,-339), (1073..1074,56..58,-346..-345), (1095,43,-343..-344).
+- Coal ore: (1089..1093,58,-332..-331) exposed - DIRECTLY UNDER WORKSHOP, avoid digging above y58 there; also (1090..1091,52..53,-340..-338).
+- Sand: x1098..1106,y60..62,z-320..-331 (mine with allowFluids).
+- Andesite needed for P2 (4 for 2 alloy -> 8 shafts; have 8 nuggets).
+
+## Bottlenecks
+- Furnace fuel (coal near workshop), andesite supply.
+
+## Layout (planned districts, x east/z south)
+- Power district: x1090..1100, z-340..-328 (existing wheels)
+- Workshop/HQ: next to wheel, flat 7x6 TBD
+- Future: ore district east, farm south, rail loop around.
+
+## Creative world (NEW world, build-only; see BUILD-BLUEPRINT.md)
+- Origin O = (-228, 71, 150); standing level Oy=71, top surface y=70 (Oy-1). x east, z south.
+- Site pad (flattened, 2026-11-03): x -290..-156, z 88..222 (= O-62..+72 both axes), y 70 grass_block on stone; air cleared y71..100. No natural river: build an artificial water channel for wheels at the engine hall.
+- Commands work (allowCommands on). mc_blocks reads far corners (>~60 blocks) as air = client-unloaded, not real; trust fill replies.
+- Structures:
+  - Step 0 site + origin: DONE
+  - Step 1 Main Street + Rail Spine: DONE. x -288..-158 (O-60..+70), z 150..157 (O+0..+7), y70 road. z150/157 stone_brick sidewalks, z151/156 gravel lanes, z152/155 stone_bricks, z153-154 polished_blackstone bed with two east-west rails at y71. Lamp posts (3 dark_oak_fence + lantern, y71..74) every 6 blocks on z150 and z157, first at x=-288. Rails unpowered/unconnected (no station yet).
+  - NEXT: Step 2 Engine Hall (x -228..-198, z 124..142 abs, i.e. O+0..30, O-26..-8) + water channel + 2 smokestacks. Session stopped after street per directive (short sessions); await review.
+  - Step 2 Engine Hall: DONE (visual + best-effort machinery). Shell x -228..-198, z 124..142 (O+0..30, O-26..-8), floor y70 polished_andesite, walls y70..77 (deepslate_bricks base y70-71, stone_bricks, glass_pane band y73..75 every 5 bays, dark_oak_log pillars every 5 x), dark_oak_planks ceiling y77, dark_oak_slab roof y78 with 1-block overhang (x -229..-197, z 123..143). Monitor clerestory x -226..-200, z 129..137, glass y78..80, slab roof y81. South door 4 wide x -212..-209 at z142 (lintel y75), path to street x -212..-209, z143..149. Hanging lanterns (chain) at z126 and z140 every 5 x.
+    - Water channel inside at z128, y70, x -227..-199, flowing; sources at x -227,-219,-211,-203 (flows meet mid-way, levels 1-3). Wheels create:water_wheel[facing=north] at (-225|-217|-209|-201, 71, 128); z-shafts at z129-130; gearbox[axis=y] at z131; x-shaft line z131 y71, x -224..-202, cogwheels at x -221,-213,-205. Rotation/stress NOT verified in-game (possible gearbox direction conflict); check when a human is nearby. The water is self-contained (no refill needed, sources are placed blocks).
+    - Smokestacks (3x3 hollow, y79..96, deepslate base y79-81, blackstone-brick rim y94-96, open top): x -226..-224 and x -202..-200, z 125..127.
+    - Lesson: clone doubling overshoots; compute exact widths (clone cleanup of x-197..-187 already done).
+  - NEXT: Step 3 HQ Tower (x -268..-252, z 120..138 abs = O-40..-24, O-30..-12). Session stopped for review.
+  - Engine hall shaft line VERIFIED WORKING (user confirmed). Fix: extra create:gearbox[axis=y] at (-217,71,130) and (-201,71,130) reverses rotation of wheels 2 and 4 so adjacent gearbox outputs agree. Lesson: opposite faces of a gearbox rotate opposite; flip alternate feeds when chaining gearboxes on one shaft.
+  - Step 3 HQ Tower: DONE. Plinth x -267..-253, z 123..137, y71-72 (deepslate/stone brick). Tower shell x -266..-254, z 124..136, y71..102 (13x13), floors (interior x -265..-255, z 125..135) at y72 (andesite), 77, 82, 87, 92, 97 (dark_oak_planks), deck y102; 6 levels, 3-high glass_pane windows each level at y74-76, 79-81, 84-86, 89-91, 94-96, 99-101; dark_oak_log corner pillars y71..102; hanging lantern at (-260, floor+3, 130) per level. South door x -261..-259, y73..76 at z136 with dark_oak flanking posts. Grand stairs x -263..-257 at z139 (y71 stair), z138 (y71 block + y72 stair), stone-brick forecourt x -263..-257, z140..149 (y70) to the street (z150), fence+lantern posts at x -264 and -256, z139. Ladder x -265, z125, y73..102 up to roof hole (y103 open). Roof slab y103 (x -267..-253, z 123..137). Clock drum x -263..-257, z 127..133, y104..107 with 4 clock glow-item-frames (y106), waxed copper dome y108..111 (cut/exposed/weathered/oxidized) + lightning rod y112..114 (top y114, ~O+43). Exposed cogwheel column on east wall x -253, z130, y79..90 (decor, unpowered).
+  - NEXT: Step 4 catwalks at y O+9 = 80 linking HQ east face (x -253) to engine hall west face (x -228) etc.
+  - Step 4 Catwalk HQ -> Engine Hall: DONE. Deck spruce_planks y77 (stand y78 = HQ level-2 floor level, NOT y80: the HQ floors force it), x -253..-230, z 132..134 (3 wide); dark_oak_log beams y76 and dark_oak_planks edge y77 at z131/z135; iron_bars rails y78-79; dark_oak_fence+lantern posts (y78-80) at x -250,-244,-238,-232 on both sides; spruce_log support columns y71-75 at x -250,-241,-232 on z131/z135. HQ doorway: east wall x-254, z132..134, y78..80. East end at x-230 meets hall roof overhang slab (x-229, y78, +0.5 step) - no stair into the hall interior yet; the hall roof is walkable. Workshop link (to x -214..-200 side, Step 5) to be added from the hall roof or HQ later.
+  - NEXT: Step 5 Workshop (x -194..-180, z 126..138 abs = O+34..48, O-24..-12).
+  - Step 5 Workshop / Mechanical Hall: DONE. Shell x -194..-180, z 126..138 (15x13), walls y70..76, deepslate base y70-71, glass_pane windows y73..75 (z-walls x -192..-189 & -185..-182; end walls z 128..130 & 134..136), dark_oak_log pillars at corners, x-187 (north wall), and mid-gable z132 at both ends. Interior floor polished_andesite y70; ceiling open under roof. South door x -188..-186, y71..74 at z138 (lintel y75) with stone-brick path z139..149 to the street. Gabled dark_oak stair roof along x (x -195..-179, eaves z125 & z139 at y77, ridge z132 y83 planks + slab y84), stone-brick gable ends with a log + pane at z132. Crane: spruce_log gantry beam z127..137 at x-187, y76, chain y73-75 + hanging lantern (hook) at z132. Visible Create line at z131 (seen through z126/z138 windows): shaft line y73 x -193..-181 with cogwheels at x-189,-183; mechanical_mixer (-191,73,131) over basin (-191,71,131); mechanical_press (-185,73,131) facing north over depot (-185,71,131). Unpowered/untested decor (no rotation source connected). Ridge lanterns at x-190,-184 (z132, y78).
+  - Note: blueprint says 15x12; built 15x13 (z 126..138) to match the O-24..-12 span.
+  - NEXT: Step 6 Foundry (x -228..-194, z 162..186 abs = O+0..34, O+12..36).
+  - Step 6 Foundry & Ore Processing: DONE. Shell x -228..-194, z 162..186 (35x25), walls y70..77, floor smooth_stone y70, deepslate base y70-71, glass_pane windows y73..75 (6-wide bays, dark_oak_log pillars at x -228,-222,-216,-210,-204,-198,-194 on z162/z186; end walls windows z165..183), hanging lanterns (y75) at z164/z184 every 6 x. Roof dark_oak_slab y78 (x -229..-193, z 161..187) with glass clerestory x -225..-211, z 169..179 (y78..80, slab roof y81). Two street doors on the north wall z162: x -227..-223 and x -215..-211 (y71..74, lintel y75), stone-brick paths z158..161 to the street. Interior: crushing wheels create:crushing_wheel[axis=z] at (-222,-220,-216,-214; y72; z172) with z-shafts z173-174, hoppers y75 at x-221/-215, drive shaft x -222..-213 at z175 y72 (cog at x-218); washing line: depots at x -208,-206,-204 (z172,y71) between water cauldrons, shaft line y73 x -208..-204. All Create parts are UNPOWERED decor. Furnace: tiered polished_blackstone_bricks, base x -202..-196, z 177..183, y71..74; mid x-201..-197, z178..182, y75..78; top x-200..-198, z179..181, y79..82; sealed lava cavity x-200..-198, y72-73, z178..180 behind orange_stained_glass front at z177 (visible from the north/front). Chimneys (3x3 hollow, y79..101 = 23 tall, deepslate base y79-81, blackstone rim y99-101, open tops): x -209..-207 and x -205..-203, z 181..183.
+  - NEXT: Step 7 Storage & Distribution (x -278..-252, z 162..184 abs = O-50..-24, O+12..34).
+  - Step 7 Storage & Distribution: DONE. Warehouse x -278..-252, z 162..184 (27x23), walls y70..76 (deepslate base y70-71, glass_pane band y73..75 all round), dark_oak_log pillars on z162/z184 at x -278,-271,-264,-257,-252, spruce_planks floor y70, dark_oak_slab roof y77 (x -279..-251, z 161..185). Glazed cupola x -269..-261, z 169..177, y77..79 with waxed_cut_copper_slab roof y80 (ceiling open below). Three loading doors on z162: x -276..-273, -269..-266, -262..-259 (y71..74, lintels y75). Loading dock z158..161 flush with the street (stone_bricks y70) under a spruce_slab canopy y75 with dark_oak_fence posts at z158, x -278,-271,-264,-257,-252 and hanging lanterns y74 (z160). Interior: barrel stacks (3 high) x -276..-267 in rows z166-167, 172-173, 178-179; chest rows x -262..-254 at z166, 172, 178, 182; hanging lanterns y75 at x -274,-270,-259,-255 on rows z164,169,175,181.
+    - Lesson: a masked /clone of a whole end-wall column copies the end wall; clone only the z-rows you need.
+  - Step 8 Rail Station: DONE. Footprint x -178..-158, z 144..162 (replaces that street stretch; street lamps there removed). Base stone_bricks y70; main tracks z153/154 (rail y71 on polished_blackstone bed, kept continuous with Main Street); sidings z147 and z160, x -174..-158 (NOT switched/connected to the mains). Platforms y71 (top y72): north z148..152, south z155..159, smooth_stone edges z152/z155; stone_brick_stairs up from the street at x-179. Buffer stops (blackstone bricks) at x-158 on all four tracks. Roof: dark_oak_log columns y72-75 on z150/z157 at x -175,-170,-164,-158 with z-axis log cross beams y76 (z146..161), iron_bars truss y76 along z150/z157, dark_oak_slab roof y77 (x -176..-157, z 145..162) with glass skylight z152..155. Hanging lanterns y76 at x -172,-167,-161 (z149, z158); spruce-stair benches z149 / z158. Clock tower x -178..-176, z 144..146, y71..83, dark_oak corners, clock frames y81 on S/W/E faces, waxed copper cap y84-85, lightning rod y86-87.
+  - Step 9 Woodworking + Agriculture: DONE.
+    - Sawmill x -288..-276, z 92..102: spruce_planks walls y70..75 on cobble base, spruce_log posts (corners + x-282), stripped-log plates y75, glass_pane windows, east door x-276 z96..98 (y71..73). Gabled spruce_stairs roof along x (x -289..-275, eaves z91/z103 y76, ridge z97 y81 planks + slab y82), plank gable ends with stripped-log king post. Inside: create:mechanical_saw[facing=up] (-282,71,97) with shaft+cog (decor, unpowered), log piles, crafting table, 2 hanging lanterns.
+    - Greenhouse x -272..-258, z 92..104: glass shell y70..76 on stone-brick base, dark_oak_log posts at x -272,-268,-264,-260,-258 (z92/z104), log beams y76 z93/z103, raised glass lantern roof x -270..-260, z 95..101 (y76..78) with waxed copper ridge slab y79. Farmland y70, water channel z98 (x -271..-259), carrots z93..97, beetroots z99..103, 2 hanging lanterns. West door x-272 z96..97, stone path x -275..-273 z96..98 toward the sawmill door.
+    - Farm terraces x -288..-256: T3 z105..108 (farmland y72, carrots), T2 z109..112 (farmland y71, potatoes), T1 z113..116 (farmland y70, wheat); stone-brick retaining walls; water channels at x -284,-276,-268,-260 (T1 z113-116 y70, T2 z109-111 y71, T3 z105-107 y72); central stone path x-272 with stairs at z112 and z108.
+    - Lesson again: never masked-clone a full end-wall column; it copies the wall into the interior (fixed; cleared x -268,-264,-260 and replanted).
+  - Step 10 Smokestacks + Skyline: DONE. Stacks now 6 total: engine hall x2 (y79..96), foundry x2 (y79..101), NEW brick stack east of workshop x -178..-176, z 128..130, y71..100 (30 tall, deepslate plinth y70-73, blackstone bands y86 and rim y98-100), NEW warehouse roof stack x -256..-254, z 180..182, y78..93 (16 tall). Lit campfires inside the top of every stack for smoke: (-225,95,126), (-201,95,126), (-208,100,182), (-204,100,182), (-177,99,129), (-255,92,181).
+    - Catwalk engine hall -> workshop: spruce deck y77 x -196..-195, z131..133 (iron_bars rails z130/z134) from the hall roof edge into a door in the workshop west gable (x-194, z131..133, y78..79); interior gallery spruce y77 x -194..-191 z131..133 + top slabs x -193..-191 z128..136, iron_bars rail x-190; ladder down at (-193, 71..77, 131).
+    - Engine hall roof access: ladder (-227, 71..78, 126) through ceiling and roof slab (top rung sits against a slab side; check it survives).
+    - Rooftop water tanks (spruce, waxed copper band, fence legs): foundry x -226..-223, z 164..167 (legs y79-81, tank y82-85, cap y86); warehouse x -276..-273, z 164..167 (one block lower).
+    - Gear wall on engine hall north face (z123): large_cogwheel[axis=z] at x -224,-216,-208,-200 y74, small cogs at x -220,-212,-204 y72 (decor).
+    - Banners: red at HQ y95 (x -264, -256, z137), black flanking HQ door y76 (x -262, -258, z137), red/black over engine hall door (x-213, z141/143).
+  - Step 11 Lighting/detail pass: DONE (light). Lamp posts (dark_oak_fence x3 + lantern y74) at engine-hall path x -213/-208 z146, workshop path x -189/-185 z146, terrace path foot x -273/-271 z117, sawmill-greenhouse link x-275 z95/z99. Interiors already lit per building.
+  - Reserved, not built: Step 9 blueprint "Advanced Manufacturing" land x -228..-188, z 194..220 (O+0..40, O+44..70) - pad is flat there to z222.
+  - REVIEW TODO for the human: (1) only the engine hall shaft line is functional; all other Create parts are decor; (2) station sidings unswitched; (3) HQ catwalk is at y77 not y80; (4) foundry stacks 23 tall (blueprint 24); (5) check engine-hall roof ladder top rung.

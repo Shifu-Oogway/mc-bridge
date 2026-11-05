@@ -1,0 +1,76 @@
+{
+  "name": "Hand crank + millstone: grind cobblestone into gravel",
+  "steps": [
+    {
+      "name": "mine 8 andesite",
+      "maxSteps": 60,
+      "check": {
+        "inventory": {
+          "minecraft:andesite": 8
+        }
+      },
+      "goal": "Mine 8 andesite (the block 'andesite'). You are underground near x=1080,y=53,z=-325. Andesite is buried just below and west of there around x=1077..1080, y=50..51, z=-327..-324, under stone. Dig down to it from the side with mc_mine pos (stone drops cobblestone, that is fine); never dig the block under your feet. Use mc_find_blocks block=andesite radius=6 to see positions. Stop when you hold 8 andesite."
+    },
+    {
+      "name": "smelt 2 iron ingots",
+      "maxSteps": 50,
+      "check": {
+        "inventory": {
+          "minecraft:iron_ingot": 2
+        }
+      },
+      "goal": "You carry raw iron, coal and a furnace. Place the furnace on solid ground near you, open it (mc_look at it, then mc_interact use), put 2 raw iron in the top slot and coal in the fuel slot with mc_click_slot, wait for it to smelt (mc_observe shows the furnace slots; wait with short mc_move sneak holds or mc_look calls), then take the 2 iron ingots out. Stop when you hold 2 iron ingots."
+    },
+    {
+      "name": "craft 4 andesite alloy",
+      "maxSteps": 40,
+      "check": {
+        "inventory": {
+          "create:andesite_alloy": 4
+        }
+      },
+      "goal": "Craft 2 iron nuggets per alloy: first turn the 2 iron ingots into iron nuggets (mc_craft iron_nugget) in the inventory screen. You need a 3x3 crafting table for the alloy: if none is within a few blocks, craft one from planks (mc_craft crafting_table) and place it, then open it (mc_look at it, mc_interact use). Craft create:andesite_alloy four times (each uses 2 andesite + 2 iron nuggets, diagonal pattern; mc_craft handles the layout). Stop when you hold 4 andesite alloy."
+    },
+    {
+      "name": "craft a cogwheel",
+      "maxSteps": 25,
+      "check": {
+        "inventory": {
+          "create:cogwheel": 1
+        }
+      },
+      "goal": "At a crafting table craft create:shaft (uses 2 andesite alloy, gives 8 shafts), then create:cogwheel (1 shaft + 1 plank). Keep the other 2 andesite alloy. Stop when you hold a cogwheel."
+    },
+    {
+      "name": "make an andesite casing",
+      "maxSteps": 40,
+      "check": {
+        "inventory": {
+          "create:andesite_casing": 1
+        }
+      },
+      "goal": "Make 1 create:andesite_casing: place your acacia log on the ground (mc_place), hold the stone axe (mc_hotbar), look at the log and mc_interact use to strip it into a stripped acacia log. Then hold 1 create:andesite_alloy (mc_hotbar) and mc_interact use on the stripped log: it turns into an andesite casing block. Mine it (mc_mine pos) to pick it up. Stop when you hold the casing."
+    },
+    {
+      "name": "craft millstone and hand crank",
+      "maxSteps": 30,
+      "check": {
+        "inventory": {
+          "create:millstone": 1,
+          "create:hand_crank": 1
+        }
+      },
+      "goal": "At a crafting table craft create:millstone (cogwheel on top, andesite casing in the middle, a stone-type block such as stone, cobblestone or andesite at the bottom) and create:hand_crank (3 planks over 1 andesite alloy). Stop when you hold both."
+    },
+    {
+      "name": "place them and grind cobblestone",
+      "maxSteps": 60,
+      "check": {
+        "inventory": {
+          "minecraft:gravel": 1
+        }
+      },
+      "goal": "Find open flat ground (the surface near x=1082,z=-331 is good; go up the tunnel to the east). Place the create:millstone on the ground (mc_place). Then place the create:hand_crank against a SIDE face of the millstone (aim at a side face with mc_look, hold the crank, mc_interact use), so the crank touches the millstone. Check both with mc_blocks. Hold cobblestone and mc_interact use on the millstone to put it in. Then look at the hand crank and mc_interact use with ticks=100 a few times to turn it. After that take the output: select an empty hotbar slot (mc_hotbar), look at the millstone and mc_interact use. If nothing is produced after about 5 crank turns, break the crank (mc_mine pos) and put it against a different face of the millstone (top or bottom), then try again. Success = gravel in your inventory."
+    }
+  ]
+}

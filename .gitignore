@@ -1,0 +1,16 @@
+.tools/
+.gradle/
+build/
+run/
+.idea/
+*.iml
+mcp-server/node_modules/
+run-client.log
+backups/
+run-logs/
+.claude/settings.local.json
+**/node_modules/
+*.bak
+*.bak-*
+*.bak.json
+*.log

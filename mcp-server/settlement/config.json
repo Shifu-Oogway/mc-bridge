@@ -1,0 +1,6 @@
+{
+  "instance": "Create - Perfect World Post Production - Better FPS",
+  "expectWorld": { "folder": "New World (2)", "seed": "198104039443036482" },
+  "taskTimeoutMin": 15,
+  "safety": { "abortHp": 8, "eatFood": 14, "threatRadius": 10 }
+}

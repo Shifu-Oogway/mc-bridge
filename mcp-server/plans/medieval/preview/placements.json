@@ -1,0 +1,350 @@
+{
+ "square": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 297,
+   "y": 71,
+   "z": 651
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 297,
+    "y": 71,
+    "z": 651
+   },
+   "to": {
+    "x": 320,
+    "y": 92,
+    "z": 668
+   }
+  },
+  "verify": {
+   "ok": 907,
+   "wrong_state": 0,
+   "missing": 0,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-03T19:19:12.812Z"
+ },
+ "workshop": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 310,
+   "y": 71,
+   "z": 642
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 310,
+    "y": 71,
+    "z": 642
+   },
+   "to": {
+    "x": 320,
+    "y": 80,
+    "z": 650
+   }
+  },
+  "verify": {
+   "ok": 483,
+   "wrong_state": 0,
+   "missing": 0,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-03T19:20:37.049Z"
+ },
+ "machineHall": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 321,
+   "y": 72,
+   "z": 638
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 321,
+    "y": 72,
+    "z": 638
+   },
+   "to": {
+    "x": 335,
+    "y": 90,
+    "z": 651
+   }
+  },
+  "verify": {
+   "ok": 1492,
+   "wrong_state": 0,
+   "missing": 0,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-03T19:23:30.174Z"
+ },
+ "pithead": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 321,
+   "y": 71,
+   "z": 652
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 321,
+    "y": 71,
+    "z": 652
+   },
+   "to": {
+    "x": 336,
+    "y": 91,
+    "z": 662
+   }
+  },
+  "verify": {
+   "ok": 765,
+   "wrong_state": 0,
+   "missing": 0,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-03T19:24:44.319Z"
+ },
+ "smeltery": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 337,
+   "y": 71,
+   "z": 636
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 337,
+    "y": 71,
+    "z": 636
+   },
+   "to": {
+    "x": 359,
+    "y": 97,
+    "z": 651
+   }
+  },
+  "verify": {
+   "ok": 3275,
+   "wrong_state": 0,
+   "missing": 0,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-03T19:27:16.848Z"
+ },
+ "manorWorkshop": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 299,
+   "y": 70,
+   "z": 606
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 299,
+    "y": 70,
+    "z": 606
+   },
+   "to": {
+    "x": 327,
+    "y": 94,
+    "z": 642
+   }
+  },
+  "verify": {
+   "ok": 10043,
+   "wrong_state": 0,
+   "missing": 0,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-04T05:55:40.460Z"
+ },
+ "watermillV2": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 280,
+   "y": 55,
+   "z": 645
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 280,
+    "y": 55,
+    "z": 645
+   },
+   "to": {
+    "x": 302,
+    "y": 91,
+    "z": 663
+   }
+  },
+  "verify": {
+   "ok": 6913,
+   "wrong_state": 0,
+   "missing": 1,
+   "obstructed": 6,
+   "unloaded": 0
+  },
+  "at": "2026-11-04T06:22:26.870Z"
+ },
+ "foundryV2": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 268,
+   "y": 64,
+   "z": 678
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 268,
+    "y": 64,
+    "z": 678
+   },
+   "to": {
+    "x": 305,
+    "y": 112,
+    "z": 701
+   }
+  },
+  "verify": {
+   "ok": 12874,
+   "wrong_state": 10,
+   "missing": 15,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-04T07:29:35.156Z"
+ },
+ "warehouse": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 331,
+   "y": 64,
+   "z": 637
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 331,
+    "y": 64,
+    "z": 637
+   },
+   "to": {
+    "x": 355,
+    "y": 90,
+    "z": 654
+   }
+  },
+  "verify": {
+   "ok": 8341,
+   "wrong_state": 81,
+   "missing": 2,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-04T08:43:26.524Z"
+ },
+ "sawmill": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 300,
+   "y": 60,
+   "z": 654
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 300,
+    "y": 60,
+    "z": 654
+   },
+   "to": {
+    "x": 358,
+    "y": 92,
+    "z": 688
+   }
+  },
+  "verify": {
+   "ok": 10501,
+   "wrong_state": 1,
+   "missing": 0,
+   "obstructed": 0,
+   "unloaded": 0
+  },
+  "at": "2026-11-04T10:05:03.743Z"
+ },
+ "quarry": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 356,
+   "y": 56,
+   "z": 740
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 356,
+    "y": 56,
+    "z": 740
+   },
+   "to": {
+    "x": 384,
+    "y": 95,
+    "z": 781
+   }
+  },
+  "verify": {
+   "ok": 24722,
+   "wrong_state": 5,
+   "missing": 0,
+   "obstructed": 7,
+   "unloaded": 0
+  },
+  "at": "2026-11-04T15:18:06.934Z"
+ },
+ "grainbarn": {
+  "world": "New World (3)#198104039443036482",
+  "origin": {
+   "x": 291,
+   "y": 68,
+   "z": 732
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 291,
+    "y": 68,
+    "z": 732
+   },
+   "to": {
+    "x": 338,
+    "y": 102,
+    "z": 780
+   }
+  },
+  "verify": {
+   "ok": 46141,
+   "wrong_state": 6,
+   "missing": 188,
+   "obstructed": 57,
+   "unloaded": 0
+  },
+  "at": "2026-11-04T16:23:44.883Z"
+ }
+}

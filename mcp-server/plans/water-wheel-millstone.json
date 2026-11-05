@@ -1,0 +1,111 @@
+{
+  "name": "Water-wheel-powered millstone (phase 1: materials; phase 2 geometry is designed by the overseer afterwards)",
+  "pack": "Create: Perfect World Post Production - Better FPS (MC 1.21.1, NeoForge, Create 6.0.9 per the installed jar)",
+  "facts": [
+    "Existing: millstone at 1085,64,-328 with a hand crank directly under it at 1085,63,-328 (millstone takes rotation from below). Crafting tables near 1082,64,-331 and 1089,57,-329; furnace placed near the surface.",
+    "Pond (still water, y=62) at x1098..1101, z-333..-330. Still water does not turn a wheel: phase 2 digs a trench so water flows past it.",
+    "Recipes (verified in the installed jar): water_wheel = 8 planks + 1 shaft; gearbox = andesite_casing in the middle with cogwheels above, below, left, right; cogwheel = shaft + plank; andesite_alloy = 2 andesite + 2 iron nuggets (diagonal); andesite_casing = andesite_alloy applied to a stripped log."
+  ],
+  "steps": [
+    {
+      "name": "2 acacia logs",
+      "maxSteps": 40,
+      "check": {
+        "inventory": {
+          "minecraft:acacia_log": 2
+        }
+      },
+      "goal": "Chop 2 acacia logs (mc_find_blocks #minecraft:logs radius 32 exposedOnly, then mc_mine). Do not touch the machines near x=1085,z=-328."
+    },
+    {
+      "name": "planks to 13",
+      "maxSteps": 15,
+      "check": {
+        "inventory": {
+          "minecraft:acacia_planks": 13
+        }
+      },
+      "goal": "Craft planks from exactly ONE of the logs (open inventory with mc_screen; mc_craft acacia_planks) so that you hold at least 13 acacia planks. Keep the other log: it becomes the casing."
+    },
+    {
+      "name": "3 andesite",
+      "maxSteps": 50,
+      "check": {
+        "inventory": {
+          "minecraft:andesite": 3
+        }
+      },
+      "goal": "Mine andesite until you hold 3. Use mc_find_blocks andesite radius 32 exposedOnly and pick the nearest. Stone gives cobblestone, which is fine."
+    },
+    {
+      "name": "1 andesite alloy",
+      "maxSteps": 15,
+      "check": {
+        "inventory": {
+          "create:andesite_alloy": 1
+        }
+      },
+      "goal": "Craft 1 create:andesite_alloy (2 andesite + 2 iron nuggets; needs a crafting table: place one or use one nearby)."
+    },
+    {
+      "name": "andesite casing",
+      "maxSteps": 40,
+      "check": {
+        "inventory": {
+          "create:andesite_casing": 1
+        }
+      },
+      "goal": "Place the acacia log, strip it with the stone axe (hold it, look at the log, mc_interact use), then hold the andesite alloy and mc_interact use on the stripped log to make a casing block; mine it to pick it up."
+    },
+    {
+      "name": "4 cogwheels",
+      "maxSteps": 20,
+      "check": {
+        "inventory": {
+          "create:cogwheel": 4
+        }
+      },
+      "goal": "At a crafting table craft create:cogwheel 4 times (1 create:shaft + 1 plank each)."
+    },
+    {
+      "name": "gearbox",
+      "maxSteps": 15,
+      "check": {
+        "inventory": {
+          "create:gearbox": 1
+        }
+      },
+      "goal": "At a crafting table craft create:gearbox (andesite casing in the middle, a cogwheel above, below, left and right of it; mc_craft handles the layout)."
+    },
+    {
+      "name": "water wheel",
+      "maxSteps": 15,
+      "check": {
+        "inventory": {
+          "create:water_wheel": 1
+        }
+      },
+      "goal": "At a crafting table craft create:water_wheel (8 planks around 1 shaft)."
+    }
+  ],
+  "phase2": {
+    "design": "Water flows across the TOP of the wheel (no trench, no falling water). Wheel axis z; water cells O and C' above/beside it.",
+    "cells": {
+      "water_O": "1097,62,-332 (grass now; mine LAST with allowFluids; adjacent to pond source 1098,62,-332)",
+      "water_Cprime": "1096,62,-332 (dug out first, becomes flowing water over the wheel)",
+      "wheel_W": "1096,61,-332 axis z",
+      "shaft_S1": "1096,61,-333 axis z",
+      "gearbox_G": "1096,61,-334 axis x",
+      "shaft_S2": "1096,62,-334 axis y",
+      "millstone_M": "1096,63,-334"
+    },
+    "stages": [
+      "A: build everything, water closed (verify with mc_blocks)",
+      "B: open water (mine O with allowFluids), insert cobblestone into the millstone, wait",
+      "C: collect output; success = gravel increases with nobody cranking"
+    ],
+    "notes": "Gearbox is needed because the wheel axis is horizontal and the millstone takes rotation from below (vertical axis). Water wheel needs FLOWING water; the pond is still."
+  },
+  "phase1_result": "PASSED (verified by overseer via mc_observe): water_wheel 1, gearbox 1, shaft 2. Haiku player: 44 tool calls, ~3 min.",
+  "phase2_result": "PASSED: gravel 1 -> 13 (cobblestone 33 -> 21) with water-driven millstone, no cranking. Verified by overseer via mc_observe. Corrections found: millstone input is by dropping items on top; gearbox must be placed as create:vertical_gearbox to get axis x; player body must not overlap the target cell."
+}

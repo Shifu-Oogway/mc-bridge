@@ -1,0 +1,147 @@
+{
+  "id": "starter-workshop",
+  "name": "Starter Workshop (timber-framed)",
+  "purpose": "First finished building in the final style: crafting, smelting, starter storage. Later receives the first Create shaft through the east wall.",
+  "size": { "w": 11, "h": 10, "d": 9 },
+  "palette": {
+    "C": "minecraft:cobblestone",
+    "F": "minecraft:oak_planks",
+    "I": "minecraft:smooth_sandstone",
+    "L": "minecraft:oak_log",
+    "T": "minecraft:stripped_oak_log",
+    "W": "minecraft:glass_pane",
+    "RN": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+    "RS": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+    "EN": "minecraft:oak_stairs[facing=south,half=bottom]",
+    "ES": "minecraft:oak_stairs[facing=north,half=bottom]",
+    "K": "minecraft:stripped_oak_log"
+  },
+  "alternatives": {
+    "I": ["minecraft:sandstone", "minecraft:birch_planks", "minecraft:white_wool", "minecraft:calcite"],
+    "RN": ["minecraft:deepslate_tile_stairs[facing=south,half=bottom]", "minecraft:cobblestone_stairs[facing=south,half=bottom]"],
+    "RS": ["minecraft:deepslate_tile_stairs[facing=north,half=bottom]", "minecraft:cobblestone_stairs[facing=north,half=bottom]"],
+    "C": ["minecraft:stone_bricks", "minecraft:mossy_cobblestone"]
+  },
+  "stages": [
+    {
+      "id": "foundation",
+      "name": "Plinth, floor, front step, clear interior",
+      "ops": [
+        { "kind": "walls", "from": [1, 0, 1], "to": [9, 1, 7], "block": "C" },
+        { "kind": "box", "from": [2, 0, 2], "to": [8, 0, 6], "block": "minecraft:dirt" },
+        { "kind": "floor", "from": [2, 1, 2], "to": [8, 1, 6], "block": "F" },
+        { "kind": "box", "from": [2, 2, 2], "to": [8, 4, 6], "block": "air" },
+        { "kind": "block", "from": [5, 0, 8], "block": "minecraft:cobblestone_stairs[facing=north,half=bottom]" }
+      ],
+      "checkpoint": "Plinth ring 2 high is level; floor top is one step above outside ground; step in front of door cell."
+    },
+    {
+      "id": "frame",
+      "name": "Infill walls, oak posts, top plate, windows, door",
+      "ops": [
+        { "kind": "walls", "from": [1, 2, 1], "to": [9, 4, 7], "block": "I" },
+        { "kind": "box", "from": [1, 2, 1], "to": [1, 4, 1], "block": "L" },
+        { "kind": "box", "from": [5, 2, 1], "to": [5, 4, 1], "block": "L" },
+        { "kind": "box", "from": [9, 2, 1], "to": [9, 4, 1], "block": "L" },
+        { "kind": "box", "from": [1, 2, 4], "to": [1, 4, 4], "block": "L" },
+        { "kind": "box", "from": [9, 2, 4], "to": [9, 4, 4], "block": "L" },
+        { "kind": "box", "from": [1, 2, 7], "to": [1, 4, 7], "block": "L" },
+        { "kind": "box", "from": [4, 2, 7], "to": [4, 4, 7], "block": "L" },
+        { "kind": "box", "from": [6, 2, 7], "to": [6, 4, 7], "block": "L" },
+        { "kind": "box", "from": [9, 2, 7], "to": [9, 4, 7], "block": "L" },
+        { "kind": "walls", "from": [1, 5, 1], "to": [9, 5, 7], "block": "T" },
+        { "kind": "block", "from": [2, 3, 7], "block": "W" },
+        { "kind": "block", "from": [8, 3, 7], "block": "W" },
+        { "kind": "block", "from": [3, 3, 1], "block": "W" },
+        { "kind": "block", "from": [7, 3, 1], "block": "W" },
+        { "kind": "block", "from": [1, 3, 3], "block": "W" },
+        { "kind": "block", "from": [1, 3, 5], "block": "W" },
+        { "kind": "block", "from": [9, 3, 3], "block": "W" },
+        { "kind": "block", "from": [9, 3, 5], "block": "W" },
+        { "kind": "block", "from": [5, 4, 7], "block": "T" },
+        { "kind": "block", "from": [5, 2, 7], "block": "minecraft:oak_door[facing=north,half=lower]" },
+        { "kind": "block", "from": [5, 3, 7], "block": "minecraft:oak_door[facing=north,half=upper]" }
+      ],
+      "checkpoint": "Door opens and closes; every window is a pane; posts read as vertical dark stripes against pale infill."
+    },
+    {
+      "id": "roof",
+      "name": "45-degree gable roof with oak barge boards, gable infill and king posts",
+      "ops": [
+        { "kind": "box", "from": [0, 5, 0], "to": [10, 5, 0], "block": "RN" },
+        { "kind": "box", "from": [0, 6, 1], "to": [10, 6, 1], "block": "RN" },
+        { "kind": "box", "from": [0, 7, 2], "to": [10, 7, 2], "block": "RN" },
+        { "kind": "box", "from": [0, 8, 3], "to": [10, 8, 3], "block": "RN" },
+        { "kind": "box", "from": [0, 5, 8], "to": [10, 5, 8], "block": "RS" },
+        { "kind": "box", "from": [0, 6, 7], "to": [10, 6, 7], "block": "RS" },
+        { "kind": "box", "from": [0, 7, 6], "to": [10, 7, 6], "block": "RS" },
+        { "kind": "box", "from": [0, 8, 5], "to": [10, 8, 5], "block": "RS" },
+        { "kind": "box", "from": [0, 9, 4], "to": [10, 9, 4], "block": "K" },
+        { "kind": "box", "from": [0, 5, 0], "to": [0, 8, 3], "block": "air" },
+        { "kind": "block", "from": [0, 5, 0], "block": "EN" },
+        { "kind": "block", "from": [0, 6, 1], "block": "EN" },
+        { "kind": "block", "from": [0, 7, 2], "block": "EN" },
+        { "kind": "block", "from": [0, 8, 3], "block": "EN" },
+        { "kind": "block", "from": [10, 5, 0], "block": "EN" },
+        { "kind": "block", "from": [10, 6, 1], "block": "EN" },
+        { "kind": "block", "from": [10, 7, 2], "block": "EN" },
+        { "kind": "block", "from": [10, 8, 3], "block": "EN" },
+        { "kind": "block", "from": [0, 5, 8], "block": "ES" },
+        { "kind": "block", "from": [0, 6, 7], "block": "ES" },
+        { "kind": "block", "from": [0, 7, 6], "block": "ES" },
+        { "kind": "block", "from": [0, 8, 5], "block": "ES" },
+        { "kind": "block", "from": [10, 5, 8], "block": "ES" },
+        { "kind": "block", "from": [10, 6, 7], "block": "ES" },
+        { "kind": "block", "from": [10, 7, 6], "block": "ES" },
+        { "kind": "block", "from": [10, 8, 5], "block": "ES" },
+        { "kind": "box", "from": [1, 6, 2], "to": [1, 6, 6], "block": "I" },
+        { "kind": "box", "from": [1, 7, 3], "to": [1, 7, 5], "block": "I" },
+        { "kind": "box", "from": [9, 6, 2], "to": [9, 6, 6], "block": "I" },
+        { "kind": "box", "from": [9, 7, 3], "to": [9, 7, 5], "block": "I" },
+        { "kind": "box", "from": [1, 6, 4], "to": [1, 8, 4], "block": "T" },
+        { "kind": "box", "from": [9, 6, 4], "to": [9, 8, 4], "block": "T" }
+      ],
+      "checkpoint": "No sky visible from inside; eaves overhang one block on all sides; needs temporary scaffolding (dirt) on the outside, removed after."
+    },
+    {
+      "id": "interior",
+      "name": "Crafting corner, furnace, starter storage, light",
+      "ops": [
+        { "kind": "block", "from": [2, 2, 2], "block": "minecraft:crafting_table" },
+        { "kind": "block", "from": [3, 2, 2], "block": "minecraft:furnace[facing=south]" },
+        { "kind": "block", "from": [7, 2, 2], "block": "minecraft:chest[facing=south]" },
+        { "kind": "block", "from": [8, 2, 2], "block": "minecraft:chest[facing=south]" },
+        { "kind": "block", "from": [2, 2, 6], "block": "minecraft:torch" },
+        { "kind": "block", "from": [8, 2, 6], "block": "minecraft:torch" },
+        { "kind": "block", "from": [5, 2, 4], "block": "minecraft:torch" }
+      ],
+      "checkpoint": "Light level >= 8 on every floor cell (check with mc_blocks light); 2 chests form one double chest; walkway x3..7 z3..6 clear."
+    },
+    {
+      "id": "details",
+      "name": "Lantern posts at the door, window boxes",
+      "ops": [
+        { "kind": "box", "from": [3, 0, 8], "to": [3, 1, 8], "block": "minecraft:oak_fence" },
+        { "kind": "block", "from": [3, 2, 8], "block": "minecraft:lantern" },
+        { "kind": "box", "from": [7, 0, 8], "to": [7, 1, 8], "block": "minecraft:oak_fence" },
+        { "kind": "block", "from": [7, 2, 8], "block": "minecraft:lantern" },
+        { "kind": "block", "from": [2, 2, 8], "block": "minecraft:spruce_slab[type=top]" },
+        { "kind": "block", "from": [2, 3, 8], "block": "minecraft:potted_red_tulip" },
+        { "kind": "block", "from": [8, 2, 8], "block": "minecraft:spruce_slab[type=top]" },
+        { "kind": "block", "from": [8, 3, 8], "block": "minecraft:potted_azure_bluet" }
+      ],
+      "checkpoint": "Lanterns lit either side of the door; window boxes under both front windows."
+    }
+  ],
+  "clearance": [
+    { "name": "walkway", "from": [3, 2, 3], "to": [7, 3, 6] },
+    { "name": "door approach", "from": [5, 0, 8], "to": [5, 3, 8] },
+    { "name": "future shaft entry (east wall, for first Create power)", "from": [9, 3, 3], "to": [10, 3, 3] }
+  ],
+  "notes": [
+    "Local frame: x right, y up, z toward the front door. facing = world direction the front door faces.",
+    "origin.y = the standing level on flat ground (first air layer above the grass): the plinth sits ON the ground, nothing is dug out. Replacing the top ground layer block by block failed live (holes hide each other's faces).",
+    "Logs/stripped logs are placed by clicking the block below, so axis=y; axis is deliberately not specified (not verified).",
+    "Roof cells above y=4 are out of reach from the ground: the controller builds a temporary dirt scaffold outside the walls, then removes it."
+  ]
+}

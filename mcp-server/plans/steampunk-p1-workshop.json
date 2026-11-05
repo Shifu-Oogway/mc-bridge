@@ -1,0 +1,81 @@
+{
+  "name": "Steampunk P1: tools, storage and a small workshop at the base site",
+  "context": "Read steampunk/DIRECTIVE.md first. Strategic purpose: every later machine needs tools, planks/stone, andesite and a place to keep items. Architecture: workshop is the first brick of the industrial district, built beside the existing wheel at x1090..1095, z-340..-335 (flat ground assumed; verify with mc_terrain). Frame spruce/dark oak, stone brick or cobble walls, glass windows, lanterns. Next objective: plans/steampunk-p2-power-bank.json.",
+  "steps": [
+    {
+      "name": "8 logs",
+      "maxSteps": 60,
+      "check": {
+        "inventory": {
+          "minecraft:acacia_log": 8
+        }
+      },
+      "goal": "Chop ACACIA trees (acacia_log) until you hold 8 acacia logs (mc_find_blocks acacia_log radius 32 exposedOnly, then mc_mine). Stay away from x1082..1101, z-334..-328 machines."
+    },
+    {
+      "name": "stone tools",
+      "maxSteps": 50,
+      "check": {
+        "inventory": {
+          "minecraft:stone_pickaxe": 1,
+          "minecraft:stone_axe": 1
+        }
+      },
+      "goal": "Craft planks, sticks, 6 cobblestone then a stone pickaxe and a stone axe (skip if you already own them; the check passes then). Mine cobblestone from exposed stone with mc_find_blocks stone."
+    },
+    {
+      "name": "stack of cobblestone",
+      "maxSteps": 80,
+      "check": {
+        "inventory": {
+          "minecraft:cobblestone": 64
+        }
+      },
+      "goal": "Mine cobblestone until you hold at least 64. You already own gravel; gravel is fine. Use exposed stone away from the machines."
+    },
+    {
+      "name": "3 chests",
+      "maxSteps": 30,
+      "check": {
+        "inventory": {
+          "minecraft:chest": 3
+        }
+      },
+      "goal": "Craft 3 chests (8 planks each, ring around an empty centre in the 3x3 grid). You need a crafting table: use a nearby one or craft+place your own."
+    },
+    {
+      "name": "glass for windows",
+      "maxSteps": 60,
+      "check": {
+        "inventory": {
+          "minecraft:glass": 8
+        }
+      },
+      "goal": "Smelt sand into 8 glass in a furnace (furnace + fuel + sand from the shore or desert; mc_find_blocks sand). Fuel: logs or planks. Take the glass out when done."
+    },
+    {
+      "name": "survey the workshop site",
+      "maxSteps": 12,
+      "goal": "Run mc_terrain around x1092,z-338 radius 8. Report in your final line whether a 7x6 area is flat within +-1 block. If not, pick the nearest flat 7x6 area and state its corner coordinates. Do not place anything yet.",
+      "verify": "report the flat area"
+    },
+    {
+      "name": "workshop floor and frame",
+      "maxSteps": 120,
+      "goal": "On the surveyed 7x6 area: place a cobblestone floor, then 4 log corner posts, 4 blocks tall. Work from the outside; remember your body must not overlap the target cell. Verify one corner post with mc_blocks.",
+      "verify": "floor 7x6 of cobblestone, 4 corner posts of logs height 4"
+    },
+    {
+      "name": "walls, windows, roof",
+      "maxSteps": 150,
+      "goal": "Fill the walls with cobblestone between the posts, put glass in the middle two blocks of each long wall at height 2..3, leave a 1x2 door gap on a short wall, roof with planks. Place 2 lanterns or torches inside. Verify with mc_blocks along one wall.",
+      "verify": "walls of cobblestone, glass in the middle of the long walls, roof of planks, door gap"
+    },
+    {
+      "name": "furnishing: crafting, furnace, storage",
+      "maxSteps": 60,
+      "goal": "Inside: place a crafting table, a furnace, and the 3 chests in a row against a wall. Put cobblestone surplus (keep 16) into chest 1. The check passes when all 3 chests have left your inventory.",
+      "verify": "all chests placed"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+13:55:23 PING version: {"name":"1.21.1","protocol":767} isModded: true forgeData: none 
+13:55:23 PING mentions neoforge: false create: false
+13:55:24 protocol state -> login
+13:55:24 packet login encryption_begin 
+13:55:24 protocol state -> configuration
+13:55:24 packet configuration custom_payload minecraft:unregister
+13:55:24 packet configuration custom_payload minecraft:register
+13:55:24 packet configuration custom_payload neoforge:register
+13:55:24 KICKED: {"type":"compound","value":{"with":{"type":"list","value":{"type":"string","value":["21.1.219"]}},"fallback":{"type":"string","value":"You are trying to connect to a server that is running NeoForge, but you are not. Please install NeoForge Version: %s to connect to this server."},"translate":{"type":"string","value":"neoforge.network.negotiation.failure.vanilla.client.not_supported"}}}
+13:55:24 states seen: login > configuration
+13:55:24 END: disconnect.quitting

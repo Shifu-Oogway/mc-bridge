@@ -1,0 +1,22 @@
+{
+  "name": "mc-bridge-mcp",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "engines": { "node": ">=23.6" },
+  "scripts": {
+    "start": "node index.js",
+    "typecheck": "tsc -p .",
+    "test": "node --test \"settlement/test/*.test.ts\"",
+    "check": "npm run typecheck && npm test && node --check index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  }
+}

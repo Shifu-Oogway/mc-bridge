@@ -1,0 +1,34 @@
+{
+  "name": "Steampunk P2: expandable power bank (more water wheels on a shared shaft line)",
+  "context": "Strategic purpose: reliable rotational power for presses, saws and drills. Reuses the verified wheel design (flowing water across the TOP of the wheel, wheel axis z). Current state: one wheel at (1096,61,-332) driving shaft 1096,61,-333 -> gearbox 1096,61,-334 (axis x) -> shaft up to the millstone at (1096,63,-334). Dependencies: P1 workshop (tools, chests). Architecture: the shaft line runs west->east inside a brick 'engine hall' along z=-334 so the exposed shafts and cogs become a visible feature. Next objective: write a P3 plan for iron mining and ore processing (overseer must first verify press/crushing recipes in the jar).",
+  "steps": [
+    {
+      "name": "materials for 2 more wheels",
+      "maxSteps": 120,
+      "check": {
+        "inventory": {
+          "create:water_wheel": 2
+        }
+      },
+      "goal": "Craft 2 create:water_wheel (8 planks around 1 create:shaft each). You need 16 planks and 2 shafts. Shafts come from andesite alloy (2 alloy -> 8 shafts); alloy = 2 andesite + 2 iron nuggets. Get iron from raw iron smelted in a furnace; mc_find_blocks iron_ore radius 32 to locate it. Report if no iron is found within 32 blocks."
+    },
+    {
+      "name": "6 extra shafts and 2 cogwheels",
+      "maxSteps": 60,
+      "check": {
+        "inventory": {
+          "create:shaft": 6,
+          "create:cogwheel": 2
+        }
+      },
+      "goal": "Craft 6 more create:shaft and 2 create:cogwheel (shaft + plank each). Make extra andesite alloy if needed."
+    },
+    {
+      "name": "survey: second wheel site",
+      "maxSteps": 15,
+      "goal": "Look at the pond edge (x1098..1101, z-333..-330, y62). Report two positions on the pond bank where a wheel can sit with axis z and a flowing-water cell above it, mirroring the first wheel (wheel at y61, water cell at y62 above it, source of water adjacent). Use mc_blocks. Do NOT place yet; the overseer will confirm coordinates.",
+      "verify": "report 2 candidate wheel positions"
+    }
+  ],
+  "gate": "STOP after the survey. The overseer reviews the report and supplies exact coordinates for the wheel placement steps (see reference_create_build_gotchas in memory)."
+}

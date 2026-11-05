@@ -1,0 +1,191 @@
+{
+ "starter-workshop": {
+  "origin": {
+   "x": 310,
+   "y": 71,
+   "z": 642
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 310,
+    "y": 71,
+    "z": 642
+   },
+   "to": {
+    "x": 320,
+    "y": 80,
+    "z": 650
+   }
+  },
+  "cost": 0
+ },
+ "smeltery": {
+  "origin": {
+   "x": 326,
+   "y": 71,
+   "z": 642
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 326,
+    "y": 71,
+    "z": 642
+   },
+   "to": {
+    "x": 336,
+    "y": 89,
+    "z": 650
+   }
+  },
+  "cost": 1.9
+ },
+ "watermill": {
+  "origin": {
+   "x": 297,
+   "y": 71,
+   "z": 640
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 297,
+    "y": 71,
+    "z": 640
+   },
+   "to": {
+    "x": 307,
+    "y": 83,
+    "z": 648
+   }
+  },
+  "cost": 0.3
+ },
+ "cane-bed": {
+  "origin": {
+   "x": 305,
+   "y": 71,
+   "z": 635
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 305,
+    "y": 71,
+    "z": 635
+   },
+   "to": {
+    "x": 313,
+    "y": 73,
+    "z": 637
+   }
+  },
+  "cost": 1.7
+ },
+ "warehouse": {
+  "origin": {
+   "x": 341,
+   "y": 70,
+   "z": 646
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 341,
+    "y": 70,
+    "z": 646
+   },
+   "to": {
+    "x": 357,
+    "y": 83,
+    "z": 656
+   }
+  },
+  "cost": 6.5
+ },
+ "barn": {
+  "origin": {
+   "x": 328,
+   "y": 71,
+   "z": 677
+  },
+  "facing": "east",
+  "footprint": {
+   "from": {
+    "x": 328,
+    "y": 71,
+    "z": 665
+   },
+   "to": {
+    "x": 336,
+    "y": 84,
+    "z": 677
+   }
+  },
+  "cost": 5.9
+ },
+ "wheat-field": {
+  "origin": {
+   "x": 355,
+   "y": 71,
+   "z": 666
+  },
+  "facing": "south",
+  "footprint": {
+   "from": {
+    "x": 355,
+    "y": 71,
+    "z": 666
+   },
+   "to": {
+    "x": 367,
+    "y": 73,
+    "z": 676
+   }
+  },
+  "cost": 3.6
+ },
+ "gatehouse": {
+  "origin": {
+   "x": 346,
+   "y": 72,
+   "z": 695
+  },
+  "facing": "north",
+  "footprint": {
+   "from": {
+    "x": 338,
+    "y": 72,
+    "z": 689
+   },
+   "to": {
+    "x": 346,
+    "y": 84,
+    "z": 695
+   }
+  },
+  "cost": 6.6
+ },
+ "manor": {
+  "origin": {
+   "x": 377,
+   "y": 77,
+   "z": 692
+  },
+  "facing": "north",
+  "footprint": {
+   "from": {
+    "x": 359,
+    "y": 77,
+    "z": 682
+   },
+   "to": {
+    "x": 377,
+    "y": 97,
+    "z": 692
+   }
+  },
+  "cost": 14.8
+ }
+}

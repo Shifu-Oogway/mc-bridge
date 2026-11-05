@@ -1,0 +1,3321 @@
+{
+ "tasks": [
+  {
+   "id": "tmw0r7dt60",
+   "kind": "travel",
+   "args": {
+    "x": 297,
+    "z": 666
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T13:58:58.986Z",
+   "updated": "2026-11-03T13:59:08.051Z",
+   "attempts": 1,
+   "progress": {
+    "done": 1,
+    "total": 20,
+    "note": "2 blocks to go"
+   },
+   "result": {
+    "arrived": true,
+    "pos": {
+     "x": 297.7858002773716,
+     "y": 71,
+     "z": 664.2232492114931
+    }
+   }
+  },
+  {
+   "id": "tmw0r7oaq0",
+   "kind": "gather",
+   "args": {
+    "block": "#minecraft:logs",
+    "item": "oak_log",
+    "target": 6,
+    "radius": 20
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T13:59:12.578Z",
+   "updated": "2026-11-03T13:59:43.879Z",
+   "attempts": 1,
+   "progress": {
+    "done": 6,
+    "total": 6,
+    "note": "minecraft:oak_log 6/6"
+   },
+   "result": {
+    "item": "minecraft:oak_log",
+    "have": 6
+   }
+  },
+  {
+   "id": "tmw0r8ifl0",
+   "kind": "gather",
+   "args": {
+    "block": "#minecraft:logs",
+    "item": "oak_log",
+    "target": 14,
+    "radius": 24
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T13:59:51.633Z",
+   "updated": "2026-11-03T14:01:20.208Z",
+   "attempts": 2,
+   "progress": {
+    "done": 14,
+    "total": 14,
+    "note": "minecraft:oak_log 14/14"
+   },
+   "result": {
+    "item": "minecraft:oak_log",
+    "have": 14
+   }
+  },
+  {
+   "id": "tmw0rfuku0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:stone",
+    "item": "cobblestone",
+    "target": 24,
+    "radius": 24
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:05:33.966Z",
+   "updated": "2026-11-03T14:07:04.525Z",
+   "attempts": 1,
+   "progress": {
+    "done": 25,
+    "total": 24,
+    "note": "minecraft:cobblestone 25/24"
+   },
+   "result": {
+    "item": "minecraft:cobblestone",
+    "have": 25
+   }
+  },
+  {
+   "id": "tmw0riebo0",
+   "kind": "travel",
+   "args": {
+    "x": 318,
+    "z": 645
+   },
+   "status": "cancelled",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:07:32.867Z",
+   "updated": "2026-11-03T14:07:42.339Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 20,
+    "note": "68 blocks to go"
+   },
+   "error": "interrupted by human input"
+  },
+  {
+   "id": "tmw0rkk8j0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:stone",
+    "item": "cobblestone",
+    "target": 64,
+    "radius": 32
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:09:13.843Z",
+   "updated": "2026-11-03T14:13:10.456Z",
+   "attempts": 3,
+   "progress": {
+    "done": 64,
+    "total": 64,
+    "note": "minecraft:cobblestone 64/64"
+   },
+   "result": {
+    "item": "minecraft:cobblestone",
+    "have": 64
+   }
+  },
+  {
+   "id": "tmw0rr3mr0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "foundation"
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:14:18.915Z",
+   "updated": "2026-11-03T14:16:27.971Z",
+   "attempts": 1,
+   "progress": {
+    "done": 31,
+    "total": 197,
+    "note": "23 issues"
+   },
+   "error": "too many placement issues; first: [{\"pos\":{\"x\":311,\"y\":70,\"z\":643},\"why\":\"place minecraft:cobblestone: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here\"},{\"pos\":{\"x\":311,\"y\":70,\"z\":645},\"why\":\"clear minecraft:grass_block: minecraft:cobblestone at 311,70,644 is in the way; mine it first on purpose, move to see 311,70,645 from another side, or pass clearObstacles\"},{\"pos\":{\"x\":311,\"y\":70,\"z\":646},\"why\":\"clear minecraft:grass_block: minecraft:grass_block in the way: minecraft:cobblestone at 311,70,644 is in the way; mine it first on purpose, move to see 311,70,645 from another side, or pass clearObstacles\"},{\"pos\":{\"x\":311,\"y\":70,\"z\":647},\"why\":\"clear minecraft:grass_block: minecraft:grass_block in the way: minecraft:cobblestone at 311,70,644 is in the way; mine it first on purpose, move to see 311,70,645 from another side, or pass clearObstacles\"}]"
+  },
+  {
+   "id": "tmw0rwkgd0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:stone",
+    "item": "cobblestone",
+    "target": 70,
+    "radius": 32
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:18:33.997Z",
+   "updated": "2026-11-03T14:22:52.153Z",
+   "attempts": 2,
+   "progress": {
+    "done": 72,
+    "total": 70,
+    "note": "minecraft:cobblestone 72/70"
+   },
+   "result": {
+    "item": "minecraft:cobblestone",
+    "have": 72
+   }
+  },
+  {
+   "id": "tmw0s293u0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "foundation"
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:22:59.226Z",
+   "updated": "2026-11-03T14:24:33.124Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "too many placement issues; first: [{\"pos\":{\"x\":311,\"y\":71,\"z\":643},\"why\":\"place minecraft:cobblestone: could not get within reach\"},{\"pos\":{\"x\":311,\"y\":71,\"z\":644},\"why\":\"place minecraft:cobblestone: could not get within reach\"},{\"pos\":{\"x\":311,\"y\":71,\"z\":647},\"why\":\"place minecraft:cobblestone: could not get within reach\"},{\"pos\":{\"x\":311,\"y\":71,\"z\":648},\"why\":\"place minecraft:cobblestone: could not get within reach\"}]"
+  },
+  {
+   "id": "tmw0s7cds0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "foundation"
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:26:56.752Z",
+   "updated": "2026-11-03T14:28:49.020Z",
+   "attempts": 1,
+   "progress": {
+    "done": 45,
+    "total": 197,
+    "note": "13 issues"
+   },
+   "error": "too many placement issues; first: [{\"pos\":{\"x\":311,\"y\":71,\"z\":648},\"why\":\"place minecraft:cobblestone: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here\"},{\"pos\":{\"x\":312,\"y\":71,\"z\":643},\"why\":\"place minecraft:cobblestone: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here\"},{\"pos\":{\"x\":315,\"y\":71,\"z\":643},\"why\":\"place minecraft:cobblestone: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here\"},{\"pos\":{\"x\":315,\"y\":71,\"z\":650},\"why\":\"clear minecraft:cobblestone: no tool in the hotbar can harvest it (it would drop nothing)\"}]"
+  },
+  {
+   "id": "tmw0sbfrh0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "foundation"
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:30:07.757Z",
+   "updated": "2026-11-03T14:33:42.412Z",
+   "attempts": 1,
+   "progress": {
+    "done": 228,
+    "total": 232,
+    "note": "4 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 227,
+     "wrong_state": 0,
+     "missing": 1,
+     "obstructed": 4,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 312,
+       "y": 71,
+       "z": 644
+      },
+      "why": "occupied by minecraft:oak_planks (not natural, left alone)"
+     },
+     {
+      "pos": {
+       "x": 315,
+       "y": 71,
+       "z": 650
+      },
+      "why": "clear minecraft:cobblestone: no tool in the hotbar can harvest it (it would drop nothing)"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 72,
+       "z": 649
+      },
+      "why": "occupied by minecraft:oak_planks (not natural, left alone)"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 72,
+       "z": 648
+      },
+      "why": "place minecraft:oak_planks: no minecraft:oak_planks in the hotbar or inventory"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 312,
+       "y": 71,
+       "z": 644
+      },
+      "want": "minecraft:dirt",
+      "have": "minecraft:oak_planks",
+      "status": "obstructed"
+     },
+     {
+      "pos": {
+       "x": 315,
+       "y": 71,
+       "z": 645
+      },
+      "want": "minecraft:dirt",
+      "have": "minecraft:grass_block",
+      "status": "obstructed"
+     },
+     {
+      "pos": {
+       "x": 315,
+       "y": 71,
+       "z": 650
+      },
+      "want": "minecraft:cobblestone_stairs[facing=north,half=bottom]",
+      "have": "minecraft:cobblestone",
+      "status": "obstructed"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 72,
+       "z": 649
+      },
+      "want": "minecraft:cobblestone",
+      "have": "minecraft:oak_planks",
+      "status": "obstructed"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 72,
+       "z": 648
+      },
+      "want": "minecraft:oak_planks",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw0shwga0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "foundation"
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:35:09.322Z",
+   "updated": "2026-11-03T14:35:36.138Z",
+   "attempts": 1,
+   "progress": {
+    "done": 232,
+    "total": 232,
+    "note": "0 issues"
+   },
+   "result": {
+    "complete": true,
+    "counts": {
+     "ok": 232,
+     "wrong_state": 0,
+     "missing": 0,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [],
+    "firstProblems": []
+   }
+  },
+  {
+   "id": "tmw0siosl0",
+   "kind": "mine",
+   "args": {
+    "entrance": {
+     "x": 323,
+     "y": 71,
+     "z": 654
+    },
+    "dir": "south",
+    "targetY": 12,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24
+     },
+     {
+      "dir": "west",
+      "length": 24
+     }
+    ],
+    "maxSteps": 12
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:35:46.053Z",
+   "updated": "2026-11-03T14:36:50.381Z",
+   "attempts": 1,
+   "progress": {
+    "done": 12,
+    "total": 59,
+    "note": "step 12, y 59"
+   },
+   "result": {
+    "stepsDone": 12,
+    "bottomY": 59,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24,
+      "dug": 0
+     },
+     {
+      "dir": "west",
+      "length": 24,
+      "dug": 0
+     }
+    ],
+    "budgetUsed": 12
+   }
+  },
+  {
+   "id": "tmw0skenb0",
+   "kind": "retrace",
+   "args": {},
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:37:06.215Z",
+   "updated": "2026-11-03T14:37:18.838Z",
+   "attempts": 1,
+   "progress": {
+    "done": 4,
+    "total": 5,
+    "note": "retracing tmw0siosl0: waypoint 5/5"
+   },
+   "result": {
+    "task": "tmw0siosl0",
+    "waypoints": 5,
+    "end": {
+     "task": "tmw0siosl0",
+     "x": 320.1,
+     "y": 73,
+     "z": 649.1
+    }
+   }
+  },
+  {
+   "id": "tmw0skvnd0",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 24
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:37:28.249Z",
+   "updated": "2026-11-03T14:38:27.846Z",
+   "attempts": 1,
+   "progress": {
+    "done": 20,
+    "total": 59,
+    "note": "step 20, y 51"
+   },
+   "error": "dig 323,51,675 (create:zinc_ore): no tool in the hotbar can harvest it (it would drop nothing)"
+  },
+  {
+   "id": "tmw0sm5ze1",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 24
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:38:28.298Z",
+   "updated": "2026-11-03T14:38:44.260Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "dig 323,51,675 (create:zinc_ore): no tool in the hotbar can harvest it (it would drop nothing)"
+  },
+  {
+   "id": "tmw0solmc0",
+   "kind": "mine",
+   "args": {
+    "tunnels": [
+     {
+      "step": 18,
+      "to": {
+       "x": 321,
+       "z": 661
+      }
+     }
+    ],
+    "maxSteps": 13
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:40:21.876Z",
+   "updated": "2026-11-03T14:41:34.315Z",
+   "attempts": 1,
+   "progress": {
+    "done": 13,
+    "total": 13,
+    "note": "tunnel from step 18: 13/13"
+   },
+   "result": {
+    "stepsDone": 20,
+    "bottomY": 51,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24,
+      "dug": 0
+     },
+     {
+      "dir": "west",
+      "length": 24,
+      "dug": 0
+     }
+    ],
+    "budgetUsed": 13
+   }
+  },
+  {
+   "id": "tmw0sql8i0",
+   "kind": "mine",
+   "args": {
+    "tunnels": [
+     {
+      "step": 13,
+      "to": {
+       "x": 328,
+       "z": 652
+      }
+     },
+     {
+      "step": 9,
+      "to": {
+       "x": 331,
+       "z": 655
+      }
+     }
+    ],
+    "maxSteps": 40
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:41:54.690Z",
+   "updated": "2026-11-03T14:42:08.242Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "dig 323,58,666 (minecraft:stone): no tool in the hotbar can harvest it (it would drop nothing)"
+  },
+  {
+   "id": "tmw0su6930",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 40
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:44:41.895Z",
+   "updated": "2026-11-03T14:48:26.955Z",
+   "attempts": 1,
+   "progress": {
+    "done": 16,
+    "total": 16,
+    "note": "tunnel from step 9: 16/16"
+   },
+   "error": "dig 323,51,675 (create:zinc_ore): no tool in the hotbar can harvest it (it would drop nothing)"
+  },
+  {
+   "id": "tmw0t0wjl0",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 20
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:49:55.905Z",
+   "updated": "2026-11-03T14:51:38.235Z",
+   "attempts": 1,
+   "progress": {
+    "done": 36,
+    "total": 59,
+    "note": "step 36, y 35"
+   },
+   "error": "dig 323,36,691 (minecraft:stone): no tool in the hotbar can harvest it (it would drop nothing)"
+  },
+  {
+   "id": "tmw0t33ty1",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 20
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:51:38.662Z",
+   "updated": "2026-11-03T14:52:11.757Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+  },
+  {
+   "id": "tmw0t5hso0",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 12
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:53:30.072Z",
+   "updated": "2026-11-03T14:54:00.516Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "could not get within reach"
+  },
+  {
+   "id": "tmw0t65k31",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 14
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T14:54:00.867Z",
+   "updated": "2026-11-03T14:54:30.955Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "could not get within reach"
+  },
+  {
+   "id": "tmw0vmbdg0",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 24
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:02:34.132Z",
+   "updated": "2026-11-03T16:03:23.081Z",
+   "attempts": 1,
+   "progress": {
+    "done": 37,
+    "total": 59,
+    "note": "step 37, y 34"
+   },
+   "error": "could not get within reach"
+  },
+  {
+   "id": "tmw0vovp60",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 24
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:04:33.786Z",
+   "updated": "2026-11-03T16:05:24.134Z",
+   "attempts": 1,
+   "progress": {
+    "done": 40,
+    "total": 59,
+    "note": "step 40, y 31"
+   },
+   "error": "pillar fill under 323,29,695 did not reach the floor"
+  },
+  {
+   "id": "tmw0vqnkz0",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 24
+   },
+   "status": "interrupted",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:05:56.579Z",
+   "updated": "2026-11-03T16:05:56.579Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "process restarted"
+  },
+  {
+   "id": "tmw0vrpo70",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 24
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:06:45.943Z",
+   "updated": "2026-11-03T16:09:27.551Z",
+   "attempts": 1,
+   "progress": {
+    "done": 5,
+    "total": 24,
+    "note": "branch east 5/24"
+   },
+   "result": {
+    "stepsDone": 59,
+    "bottomY": 12,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24,
+      "dug": 5
+     },
+     {
+      "dir": "west",
+      "length": 24,
+      "dug": 0
+     }
+    ],
+    "budgetUsed": 24
+   }
+  },
+  {
+   "id": "tmw0vvfvd0",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 45
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:09:39.865Z",
+   "updated": "2026-11-03T16:15:04.160Z",
+   "attempts": 1,
+   "progress": {
+    "done": 24,
+    "total": 24,
+    "note": "branch west 24/24"
+   },
+   "result": {
+    "stepsDone": 59,
+    "bottomY": 12,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24,
+      "dug": 24
+     },
+     {
+      "dir": "west",
+      "length": 24,
+      "dug": 24
+     }
+    ],
+    "budgetUsed": 43
+   }
+  },
+  {
+   "id": "tmw0w2snr0",
+   "kind": "travel",
+   "args": {
+    "x": 293,
+    "z": 666
+   },
+   "status": "cancelled",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:15:23.031Z",
+   "updated": "2026-11-03T16:15:27.478Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 20,
+    "note": "32 blocks to go"
+   },
+   "error": "interrupted by human input"
+  },
+  {
+   "id": "tmw0w2w761",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_log",
+    "item": "oak_log",
+    "target": 40,
+    "radius": 32
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:15:27.618Z",
+   "updated": "2026-11-03T16:15:28.261Z",
+   "attempts": 1,
+   "progress": {
+    "done": 4,
+    "total": 40,
+    "note": "minecraft:oak_log 4/40"
+   },
+   "error": "no more exposed minecraft:oak_log within 32 blocks outside reserved plots (have 4/40)"
+  },
+  {
+   "id": "tmw0w4tbt0",
+   "kind": "travel",
+   "args": {
+    "x": 400,
+    "z": 640
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:16:57.209Z",
+   "updated": "2026-11-03T16:16:57.472Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 20,
+    "note": "164 blocks to go"
+   },
+   "error": "bridge /goto -> HTTP 409: not standing on solid ground (falling, flying or swimming)"
+  },
+  {
+   "id": "tmw0w5r5z0",
+   "kind": "travel",
+   "args": {
+    "x": 245,
+    "z": 500
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:17:41.063Z",
+   "updated": "2026-11-03T16:17:41.320Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 20,
+    "note": "72 blocks to go"
+   },
+   "error": "bridge /goto -> HTTP 409: nothing to stand on at x=245 z=508 within 24 blocks of your height; give y"
+  },
+  {
+   "id": "tmw0w5t240",
+   "kind": "travel",
+   "args": {
+    "x": 320,
+    "z": 470
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:17:43.516Z",
+   "updated": "2026-11-03T16:18:07.301Z",
+   "attempts": 1,
+   "progress": {
+    "done": 1,
+    "total": 20,
+    "note": "62 blocks to go"
+   },
+   "error": "bridge /goto -> HTTP 409: not standing on solid ground (falling, flying or swimming)"
+  },
+  {
+   "id": "tmw0w6cl40",
+   "kind": "travel",
+   "args": {
+    "x": 400,
+    "z": 520
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:18:08.823Z",
+   "updated": "2026-11-03T16:18:09.105Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 20,
+    "note": "116 blocks to go"
+   },
+   "error": "bridge /goto -> HTTP 409: not standing on solid ground (falling, flying or swimming)"
+  },
+  {
+   "id": "tmw0w6ekv0",
+   "kind": "travel",
+   "args": {
+    "x": 420,
+    "z": 620
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:18:11.407Z",
+   "updated": "2026-11-03T16:18:11.715Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 20,
+    "note": "169 blocks to go"
+   },
+   "error": "bridge /goto -> HTTP 409: not standing on solid ground (falling, flying or swimming)"
+  },
+  {
+   "id": "tmw0w9ae50",
+   "kind": "travel",
+   "args": {
+    "x": 320,
+    "z": 740
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:20:25.949Z",
+   "updated": "2026-11-03T16:20:47.458Z",
+   "attempts": 1,
+   "progress": {
+    "done": 2,
+    "total": 20,
+    "note": "2 blocks to go"
+   },
+   "result": {
+    "arrived": true,
+    "pos": {
+     "x": 320.50003930546984,
+     "y": 75,
+     "z": 738.2186953872559
+    }
+   }
+  },
+  {
+   "id": "tmw0w9s8i0",
+   "kind": "travel",
+   "args": {
+    "x": 330,
+    "z": 820
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:20:49.074Z",
+   "updated": "2026-11-03T16:21:10.587Z",
+   "attempts": 1,
+   "progress": {
+    "done": 2,
+    "total": 20,
+    "note": "1 blocks to go"
+   },
+   "result": {
+    "arrived": true,
+    "pos": {
+     "x": 330.50664840693264,
+     "y": 79,
+     "z": 819.1425890238261
+    }
+   }
+  },
+  {
+   "id": "tmw0waa2q0",
+   "kind": "travel",
+   "args": {
+    "x": 420,
+    "z": 700
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:21:12.194Z",
+   "updated": "2026-11-03T16:21:50.238Z",
+   "attempts": 1,
+   "progress": {
+    "done": 3,
+    "total": 20,
+    "note": "2 blocks to go"
+   },
+   "result": {
+    "arrived": true,
+    "pos": {
+     "x": 420.2288533812735,
+     "y": 66,
+     "z": 701.7579433868068
+    }
+   }
+  },
+  {
+   "id": "tmw0wb4q20",
+   "kind": "travel",
+   "args": {
+    "x": 440,
+    "z": 620
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:21:51.914Z",
+   "updated": "2026-11-03T16:23:13.114Z",
+   "attempts": 1,
+   "progress": {
+    "done": 18,
+    "total": 20,
+    "note": "2 blocks to go"
+   },
+   "result": {
+    "arrived": true,
+    "pos": {
+     "x": 440.2373193255971,
+     "y": 62.206453008036775,
+     "z": 621.8430941765278
+    }
+   }
+  },
+  {
+   "id": "tmw0wd0kt0",
+   "kind": "travel",
+   "args": {
+    "x": 320,
+    "z": 740
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:23:19.853Z",
+   "updated": "2026-11-03T16:23:22.386Z",
+   "attempts": 1,
+   "progress": {
+    "done": 19,
+    "total": 20,
+    "note": "147 blocks to go"
+   },
+   "error": "travel: hop budget exhausted"
+  },
+  {
+   "id": "tmw0wd2js1",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_log",
+    "item": "oak_log",
+    "target": 44,
+    "radius": 32
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:23:22.408Z",
+   "updated": "2026-11-03T16:23:22.503Z",
+   "attempts": 1,
+   "progress": {
+    "done": 4,
+    "total": 44,
+    "note": "minecraft:oak_log 4/44"
+   },
+   "error": "no more exposed minecraft:oak_log within 32 blocks outside reserved plots (have 4/44)"
+  },
+  {
+   "id": "tmw0wdl5a0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_log",
+    "item": "oak_log",
+    "target": 44,
+    "radius": 32
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:23:46.510Z",
+   "updated": "2026-11-03T16:23:47.857Z",
+   "attempts": 1,
+   "progress": {
+    "done": 4,
+    "total": 44,
+    "note": "minecraft:oak_log 4/44"
+   },
+   "error": "gather stuck: 4 failures, last: could not get within reach"
+  },
+  {
+   "id": "tmw0wfjtl0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_log",
+    "item": "oak_log",
+    "target": 50,
+    "radius": 24
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:25:18.105Z",
+   "updated": "2026-11-03T16:27:12.626Z",
+   "attempts": 1,
+   "progress": {
+    "done": 25,
+    "total": 50,
+    "note": "minecraft:oak_log 25/50"
+   },
+   "error": "gather stuck: 8 failures, last: can't see it; minecraft:oak_leaves is in the way"
+  },
+  {
+   "id": "tmw0wi0ih1",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_leaves",
+    "item": "oak_sapling",
+    "target": 8,
+    "radius": 16
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:27:13.049Z",
+   "updated": "2026-11-03T16:27:13.078Z",
+   "attempts": 1,
+   "progress": {
+    "done": 12,
+    "total": 8,
+    "note": "minecraft:oak_sapling 12/8"
+   },
+   "result": {
+    "item": "minecraft:oak_sapling",
+    "have": 12
+   }
+  },
+  {
+   "id": "tmw0wi96s0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_log",
+    "item": "oak_log",
+    "target": 56,
+    "radius": 24
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:27:24.292Z",
+   "updated": "2026-11-03T16:29:08.074Z",
+   "attempts": 1,
+   "progress": {
+    "done": 56,
+    "total": 56,
+    "note": "minecraft:oak_log 56/56"
+   },
+   "result": {
+    "item": "minecraft:oak_log",
+    "have": 56
+   }
+  },
+  {
+   "id": "tmw0wkqka0",
+   "kind": "travel",
+   "args": {
+    "x": 334,
+    "z": 662
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:29:20.122Z",
+   "updated": "2026-11-03T16:30:43.633Z",
+   "attempts": 1,
+   "progress": {
+    "done": 19,
+    "total": 20,
+    "note": "2 blocks to go"
+   },
+   "error": "travel: hop budget exhausted"
+  },
+  {
+   "id": "tmw0wpas10",
+   "kind": "travel",
+   "args": {
+    "x": 305,
+    "z": 636
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:32:52.945Z",
+   "updated": "2026-11-03T16:33:03.665Z",
+   "attempts": 1,
+   "progress": {
+    "done": 19,
+    "total": 20,
+    "note": "3 blocks to go"
+   },
+   "error": "travel: hop budget exhausted"
+  },
+  {
+   "id": "tmw0wpjcs1",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:sand",
+    "item": "sand",
+    "target": 200,
+    "radius": 32,
+    "allowFluids": true
+   },
+   "status": "paused",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:33:04.060Z",
+   "updated": "2026-11-03T16:34:04.449Z",
+   "attempts": 1,
+   "progress": {
+    "done": 26,
+    "total": 200,
+    "note": "minecraft:sand 26/200"
+   },
+   "error": "paused: safety: under water for 8 s"
+  },
+  {
+   "id": "tmw0wr9fg0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:sand",
+    "item": "sand",
+    "target": 200,
+    "radius": 32,
+    "allowFluids": true,
+    "minY": 63
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:34:24.508Z",
+   "updated": "2026-11-03T16:35:00.310Z",
+   "attempts": 1,
+   "progress": {
+    "done": 28,
+    "total": 200,
+    "note": "minecraft:sand 28/200"
+   },
+   "error": "no more exposed minecraft:sand within 32 blocks outside reserved plots (have 28/200)"
+  },
+  {
+   "id": "tmw0wtbtu0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:diorite",
+    "item": "diorite",
+    "target": 64,
+    "radius": 24
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:36:00.930Z",
+   "updated": "2026-11-03T16:38:00.496Z",
+   "attempts": 1,
+   "progress": {
+    "done": 64,
+    "total": 64,
+    "note": "minecraft:diorite 64/64"
+   },
+   "result": {
+    "item": "minecraft:diorite",
+    "have": 64
+   }
+  },
+  {
+   "id": "tmw0wxq910",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "frame",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:39:26.245Z",
+   "updated": "2026-11-03T16:48:55.188Z",
+   "attempts": 1,
+   "progress": {
+    "done": 24,
+    "total": 112,
+    "note": "0 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 29,
+     "wrong_state": 0,
+     "missing": 83,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:oak_log: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 644
+      },
+      "why": "place minecraft:polished_diorite: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 645
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 646
+      },
+      "why": "place minecraft:oak_log: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 647
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 648
+      },
+      "why": "place minecraft:polished_diorite: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:oak_log: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:polished_diorite: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:polished_diorite: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     },
+     {
+      "pos": {
+       "x": 314,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:polished_diorite: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 643
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 644
+      },
+      "want": "minecraft:polished_diorite",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 645
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 646
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 647
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 648
+      },
+      "want": "minecraft:polished_diorite",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 643
+      },
+      "want": "minecraft:polished_diorite",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw0xek5j0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "frame",
+    "partial": true
+   },
+   "status": "interrupted",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:52:31.495Z",
+   "updated": "2026-11-03T16:53:04.827Z",
+   "attempts": 1,
+   "progress": {
+    "done": 44,
+    "total": 112,
+    "note": "4 issues"
+   },
+   "error": "process restarted"
+  },
+  {
+   "id": "tmw0xfjkl0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "frame",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:53:17.397Z",
+   "updated": "2026-11-03T16:58:39.868Z",
+   "attempts": 2,
+   "progress": {
+    "done": 101,
+    "total": 112,
+    "note": "13 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 95,
+     "wrong_state": 0,
+     "missing": 17,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 645
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 647
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 645
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 647
+      },
+      "why": "place minecraft:glass_pane: no minecraft:glass_pane in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 316,
+       "y": 75,
+       "z": 649
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 643
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 646
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 647
+      },
+      "why": "place minecraft:polished_diorite after raising: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 645
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 647
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 74,
+       "z": 643
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 74,
+       "z": 643
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 645
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 647
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw0xngxc0",
+   "kind": "mine",
+   "args": {
+    "targetY": -6,
+    "maxSteps": 20,
+    "tunnels": [
+     {
+      "step": 77,
+      "to": {
+       "x": 343,
+       "z": 731
+      }
+     },
+     {
+      "step": 77,
+      "to": {
+       "x": 303,
+       "z": 731
+      }
+     }
+    ]
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T16:59:27.216Z",
+   "updated": "2026-11-03T17:01:00.597Z",
+   "attempts": 1,
+   "progress": {
+    "done": 64,
+    "total": 77,
+    "note": "step 64, y 7"
+   },
+   "error": "dig 323,8,719 (minecraft:stone): no tool in the hotbar can harvest it (it would drop nothing)"
+  },
+  {
+   "id": "tmw0xph9x1",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 45
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:01:00.981Z",
+   "updated": "2026-11-03T17:03:50.758Z",
+   "attempts": 1,
+   "progress": {
+    "done": 77,
+    "total": 77,
+    "note": "step 77, y -6"
+   },
+   "result": {
+    "stepsDone": 77,
+    "bottomY": -6,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24,
+      "dug": 24
+     },
+     {
+      "dir": "west",
+      "length": 24,
+      "dug": 24
+     }
+    ],
+    "budgetUsed": 13
+   }
+  },
+  {
+   "id": "tmw0xtynf0",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 45
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:04:30.123Z",
+   "updated": "2026-11-03T17:10:49.386Z",
+   "attempts": 1,
+   "progress": {
+    "done": 20,
+    "total": 20,
+    "note": "tunnel from step 77: 20/20"
+   },
+   "result": {
+    "stepsDone": 77,
+    "bottomY": -6,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24,
+      "dug": 24
+     },
+     {
+      "dir": "west",
+      "length": 24,
+      "dug": 24
+     }
+    ],
+    "budgetUsed": 40
+   }
+  },
+  {
+   "id": "tmw0y2df00",
+   "kind": "mine",
+   "args": {
+    "maxSteps": 45,
+    "tunnels": [
+     {
+      "step": 77,
+      "to": {
+       "x": 353,
+       "z": 731
+      }
+     },
+     {
+      "step": 77,
+      "to": {
+       "x": 293,
+       "z": 731
+      }
+     }
+    ]
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:11:02.508Z",
+   "updated": "2026-11-03T17:14:05.353Z",
+   "attempts": 1,
+   "progress": {
+    "done": 15,
+    "total": 30,
+    "note": "tunnel from step 77: 15/30"
+   },
+   "result": {
+    "stepsDone": 77,
+    "bottomY": -6,
+    "branches": [
+     {
+      "dir": "east",
+      "length": 24,
+      "dug": 24
+     },
+     {
+      "dir": "west",
+      "length": 24,
+      "dug": 24
+     }
+    ],
+    "budgetUsed": 45
+   }
+  },
+  {
+   "id": "tmw0y7ot00",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "frame",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:15:10.548Z",
+   "updated": "2026-11-03T17:16:14.488Z",
+   "attempts": 1,
+   "progress": {
+    "done": 111,
+    "total": 112,
+    "note": "15 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 96,
+     "wrong_state": 0,
+     "missing": 16,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 645
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 312,645"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 647
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 312,647"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 313,649"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 313,644"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 74,
+       "z": 643
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 317,644"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 317,649"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 645
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 318,645"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 647
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 318,647"
+     },
+     {
+      "pos": {
+       "x": 316,
+       "y": 75,
+       "z": 649
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 643
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 646
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 649
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 645
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 74,
+       "z": 647
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 74,
+       "z": 643
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 74,
+       "z": 643
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 645
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 74,
+       "z": 647
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw0y9kwk0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "frame",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:16:38.804Z",
+   "updated": "2026-11-03T17:19:11.727Z",
+   "attempts": 1,
+   "progress": {
+    "done": 102,
+    "total": 112,
+    "note": "6 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 103,
+     "wrong_state": 0,
+     "missing": 9,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 311,649"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 319,649"
+     },
+     {
+      "pos": {
+       "x": 316,
+       "y": 75,
+       "z": 649
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 643
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 646
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 649
+      },
+      "why": "place minecraft:oak_log: no minecraft:oak_log in the hotbar or inventory"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 643
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 319,643"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 649
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 319,649"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 76,
+       "z": 649
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 320,649"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 316,
+       "y": 75,
+       "z": 649
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 643
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 646
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 649
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 643
+      },
+      "want": "minecraft:oak_planks",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 649
+      },
+      "want": "minecraft:oak_planks",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw0yd5qb0",
+   "kind": "travel",
+   "args": {
+    "x": 586,
+    "z": 746
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:19:25.762Z",
+   "updated": "2026-11-03T17:21:19.676Z",
+   "attempts": 1,
+   "progress": {
+    "done": 3,
+    "total": 20,
+    "note": "96 blocks to go"
+   },
+   "error": "blocked at {\"x\":568.244577618898,\"y\":64,\"z\":759.2084961785403}"
+  },
+  {
+   "id": "tmw0yfzgd0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_log",
+    "item": "oak_log",
+    "target": 16,
+    "radius": 32
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:21:37.597Z",
+   "updated": "2026-11-03T17:21:43.500Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 16,
+    "note": "minecraft:oak_log 0/16"
+   },
+   "error": "gather stuck: 4 failures, last: could not get within reach"
+  },
+  {
+   "id": "tmw0yg53n0",
+   "kind": "travel",
+   "args": {
+    "x": 322,
+    "z": 652
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:21:44.915Z",
+   "updated": "2026-11-03T17:22:20.540Z",
+   "attempts": 1,
+   "progress": {
+    "done": 2,
+    "total": 20,
+    "note": "201 blocks to go"
+   },
+   "error": "bridge /goto -> HTTP 409: no path found: every route is blocked by walls, drops over 3 blocks, or hazards"
+  },
+  {
+   "id": "tmw0yh6sm0",
+   "kind": "retrace",
+   "args": {},
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:22:33.766Z",
+   "updated": "2026-11-03T17:23:11.888Z",
+   "attempts": 1,
+   "progress": {
+    "done": 14,
+    "total": 15,
+    "note": "retracing tmw0yg53n0: waypoint 15/15"
+   },
+   "result": {
+    "task": "tmw0yg53n0",
+    "waypoints": 15,
+    "end": {
+     "task": "tmw0yg53n0",
+     "x": 572.5,
+     "y": 67,
+     "z": 754.5
+    }
+   }
+  },
+  {
+   "id": "tmw0ykdyc0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:oak_log",
+    "item": "oak_log",
+    "target": 16,
+    "radius": 24,
+    "minY": 79
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:25:03.012Z",
+   "updated": "2026-11-03T17:26:07.350Z",
+   "attempts": 1,
+   "progress": {
+    "done": 16,
+    "total": 16,
+    "note": "minecraft:oak_log 16/16"
+   },
+   "result": {
+    "item": "minecraft:oak_log",
+    "have": 16
+   }
+  },
+  {
+   "id": "tmw0ylzqo0",
+   "kind": "travel",
+   "args": {
+    "x": 322,
+    "z": 652
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:26:17.904Z",
+   "updated": "2026-11-03T17:27:47.738Z",
+   "attempts": 1,
+   "progress": {
+    "done": 19,
+    "total": 20,
+    "note": "3 blocks to go"
+   },
+   "error": "travel: hop budget exhausted"
+  },
+  {
+   "id": "tmw0yo8og0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "frame",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:28:02.800Z",
+   "updated": "2026-11-03T17:29:34.565Z",
+   "attempts": 1,
+   "progress": {
+    "done": 109,
+    "total": 112,
+    "note": "5 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 106,
+     "wrong_state": 0,
+     "missing": 6,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 311,649"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "why": "place minecraft:glass_pane after raising: could not reach stand column 319,649"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 643
+      },
+      "why": "place minecraft:oak_log after raising: could not reach stand column 320,643"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 643
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 319,643"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 649
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 319,649"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 76,
+       "z": 649
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 320,649"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 312,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 74,
+       "z": 649
+      },
+      "want": "minecraft:glass_pane",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 75,
+       "z": 643
+      },
+      "want": "minecraft:oak_log",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 643
+      },
+      "want": "minecraft:oak_planks",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 649
+      },
+      "want": "minecraft:oak_planks",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 76,
+       "z": 649
+      },
+      "want": "minecraft:oak_planks",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw0yqroq0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "frame",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:30:00.746Z",
+   "updated": "2026-11-03T17:31:36.453Z",
+   "attempts": 1,
+   "progress": {
+    "done": 112,
+    "total": 112,
+    "note": "0 issues"
+   },
+   "result": {
+    "complete": true,
+    "counts": {
+     "ok": 112,
+     "wrong_state": 0,
+     "missing": 0,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [],
+    "firstProblems": []
+   }
+  },
+  {
+   "id": "tmw0yu1a60",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:32:33.150Z",
+   "updated": "2026-11-03T17:35:14.860Z",
+   "attempts": 1,
+   "progress": {
+    "done": 29,
+    "total": 129,
+    "note": "22 issues"
+   },
+   "error": "too many placement issues; first: [{\"pos\":{\"x\":310,\"y\":76,\"z\":642},\"why\":\"place minecraft:oak_stairs after raising: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here\"},{\"pos\":{\"x\":310,\"y\":76,\"z\":650},\"why\":\"place minecraft:oak_stairs after raising: could not reach stand column 310,651\"},{\"pos\":{\"x\":311,\"y\":76,\"z\":650},\"why\":\"place minecraft:cobbled_deepslate_stairs after raising: could not reach stand column 310,650\"},{\"pos\":{\"x\":312,\"y\":76,\"z\":642},\"why\":\"place minecraft:cobbled_deepslate_stairs after raising: could not reach stand column 311,642\"}]"
+  },
+  {
+   "id": "tmw0z0dt80",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true
+   },
+   "status": "failed",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:37:29.324Z",
+   "updated": "2026-11-03T17:41:27.421Z",
+   "attempts": 1,
+   "progress": {
+    "done": 26,
+    "total": 129,
+    "note": "20 issues"
+   },
+   "error": "too many placement issues; first: [{\"pos\":{\"x\":310,\"y\":76,\"z\":650},\"why\":\"place minecraft:oak_stairs after raising: could not reach stand column 310,651\"},{\"pos\":{\"x\":311,\"y\":76,\"z\":650},\"why\":\"place minecraft:cobbled_deepslate_stairs after raising: could not reach stand column 310,650\"},{\"pos\":{\"x\":312,\"y\":76,\"z\":642},\"why\":\"placed with wrong state {\\\"facing\\\":\\\"east\\\",\\\"half\\\":\\\"bottom\\\",\\\"shape\\\":\\\"inner_right\\\",\\\"waterlogged\\\":\\\"false\\\"} want {\\\"facing\\\":\\\"south\\\",\\\"half\\\":\\\"bottom\\\"}\"},{\"pos\":{\"x\":312,\"y\":76,\"z\":650},\"why\":\"place minecraft:cobbled_deepslate_stairs after raising: could not reach stand column 311,650\"}]"
+  },
+  {
+   "id": "tmw0zqp5h0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T17:57:57.077Z",
+   "updated": "2026-11-03T18:01:18.168Z",
+   "attempts": 1,
+   "progress": {
+    "done": 92,
+    "total": 129,
+    "note": "16 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 16,
+     "wrong_state": 2,
+     "missing": 111,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 312,
+       "y": 76,
+       "z": 642
+      },
+      "why": "existing block has wrong state {\"facing\":\"east\",\"half\":\"bottom\",\"shape\":\"inner_right\",\"waterlogged\":\"false\"}"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 642
+      },
+      "why": "existing block has wrong state {\"facing\":\"east\",\"half\":\"bottom\",\"shape\":\"straight\",\"waterlogged\":\"false\"}"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 77,
+       "z": 644
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 311,643"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 77,
+       "z": 645
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 311,644"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 77,
+       "z": 646
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 311,645"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 644
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,643"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 645
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,644"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 646
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 319,645"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 647
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,648"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 648
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,649"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 78,
+       "z": 645
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 311,644"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 78,
+       "z": 646
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 311,645"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 310,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:oak_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:cobbled_deepslate_stairs",
+      "status": "wrong_state"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:cobbled_deepslate_stairs",
+      "status": "wrong_state"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 314,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 314,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw0zwqio0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T18:02:38.784Z",
+   "updated": "2026-11-03T18:05:50.269Z",
+   "attempts": 1,
+   "progress": {
+    "done": 92,
+    "total": 129,
+    "note": "15 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 17,
+     "wrong_state": 1,
+     "missing": 111,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 642
+      },
+      "why": "existing block has wrong state {\"facing\":\"east\",\"half\":\"bottom\",\"shape\":\"inner_right\",\"waterlogged\":\"false\"}"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 77,
+       "z": 644
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 311,643"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 77,
+       "z": 645
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 311,644"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 77,
+       "z": 646
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 311,645"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 644
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,643"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 645
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,644"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 646
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 319,645"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 647
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,648"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 77,
+       "z": 648
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 319,649"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 78,
+       "z": 645
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 311,644"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 78,
+       "z": 646
+      },
+      "why": "place minecraft:oak_planks after raising: could not reach stand column 311,645"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 78,
+       "z": 647
+      },
+      "why": "place minecraft:polished_diorite after raising: could not reach stand column 311,648"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 310,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:oak_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 311,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:cobbled_deepslate_stairs",
+      "status": "wrong_state"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 314,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 314,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 315,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw101toz0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true,
+    "only": "_stairs$",
+    "limit": 4
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T18:06:36.179Z",
+   "updated": "2026-11-03T18:07:45.730Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 18,
+     "wrong_state": 1,
+     "missing": 110,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 310,
+       "y": 76,
+       "z": 650
+      },
+      "why": "place minecraft:oak_stairs from its stand point: no usable face to place against: every neighbour is air, fluid, interactive, or hidden from here"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 310,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:oak_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 312,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:cobbled_deepslate_stairs",
+      "status": "wrong_state"
+     },
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 314,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 314,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 315,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 315,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw104so10",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true,
+    "only": "_stairs$",
+    "limit": 12
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T18:08:54.817Z",
+   "updated": "2026-11-03T18:13:28.695Z",
+   "attempts": 1,
+   "progress": {
+    "done": 8,
+    "total": 129,
+    "note": "1 issues"
+   },
+   "result": {
+    "complete": false,
+    "counts": {
+     "ok": 25,
+     "wrong_state": 1,
+     "missing": 103,
+     "obstructed": 0,
+     "unloaded": 0
+    },
+    "issues": [
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 642
+      },
+      "why": "existing block has wrong state {\"facing\":\"east\",\"half\":\"bottom\",\"shape\":\"inner_right\",\"waterlogged\":\"false\"}"
+     }
+    ],
+    "firstProblems": [
+     {
+      "pos": {
+       "x": 313,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:cobbled_deepslate_stairs",
+      "status": "wrong_state"
+     },
+     {
+      "pos": {
+       "x": 316,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 316,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 317,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 318,
+       "y": 76,
+       "z": 650
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     },
+     {
+      "pos": {
+       "x": 319,
+       "y": 76,
+       "z": 642
+      },
+      "want": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom]",
+      "have": "minecraft:air",
+      "status": "missing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "tmw10b0gz0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true
+   },
+   "status": "interrupted",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T18:13:44.867Z",
+   "updated": "2026-11-03T18:23:55.668Z",
+   "attempts": 1,
+   "progress": {
+    "done": 122,
+    "total": 129,
+    "note": "1 issues"
+   },
+   "error": "process restarted"
+  },
+  {
+   "id": "tmw10wfrx0",
+   "kind": "gather",
+   "args": {
+    "block": "minecraft:deepslate",
+    "item": "cobbled_deepslate",
+    "target": 20,
+    "radius": 16
+   },
+   "status": "done",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T18:30:24.477Z",
+   "updated": "2026-11-03T18:31:10.045Z",
+   "attempts": 1,
+   "progress": {
+    "done": 20,
+    "total": 20,
+    "note": "minecraft:cobbled_deepslate 20/20"
+   },
+   "result": {
+    "item": "minecraft:cobbled_deepslate",
+    "have": 20
+   }
+  },
+  {
+   "id": "tmw10xp3i0",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true
+   },
+   "status": "interrupted",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T18:31:23.214Z",
+   "updated": "2026-11-03T18:32:03.698Z",
+   "attempts": 1,
+   "progress": {
+    "done": 121,
+    "total": 129,
+    "note": "1 issues"
+   },
+   "error": "process restarted"
+  },
+  {
+   "id": "tmw1112y40",
+   "kind": "build_stage",
+   "args": {
+    "build": "starter-workshop",
+    "stage": "roof",
+    "partial": true,
+    "only": "^$"
+   },
+   "status": "interrupted",
+   "worldId": "New World (2)#198104039443036482",
+   "created": "2026-11-03T18:34:01.132Z",
+   "updated": "2026-11-03T18:34:01.132Z",
+   "attempts": 1,
+   "progress": {
+    "done": 0,
+    "total": 0,
+    "note": "starting"
+   },
+   "error": "process restarted"
+  }
+ ]
+}

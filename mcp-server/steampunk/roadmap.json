@@ -1,0 +1,39 @@
+{
+  "objective": "Fully automated Victorian-steampunk industrial city powered by Create (see DIRECTIVE.md)",
+  "currentPhase": 1,
+  "phases": {
+    "1": "Establishment: workshop, storage, tools, food, site layout",
+    "2": "Mechanical infrastructure: reliable rotational power, proper workshop, first automated processing",
+    "3": "Industrial automation: mining, ore processing, wood, farming, logistics",
+    "4": "Industrial expansion: factories, railway, distribution, large power",
+    "5": "Advanced automation: complex chains, redundancy, contraptions",
+    "6": "Industrial metropolis: headquarters, skyline, full railway network, decoration"
+  },
+  "completed": [
+    "Hand crank + millstone grinds cobblestone to gravel (old site, 1085,63..64,-328)",
+    "Water-wheel-powered millstone, no cranking (1096,61..63,-332..-334); wheel axis z, flowing water over top"
+  ],
+  "infrastructure": {
+    "power": "1 water wheel (pond at x1098..1101, z-333..-330, y62)",
+    "processing": "2 millstones",
+    "storage": "none yet (inventory only)",
+    "crafting": "crafting tables near (1082,64,-331) and (1089,57,-329); furnace near the surface"
+  },
+  "bottlenecks": [
+    "No organised storage",
+    "Only one wheel of power; no distribution (shafts/cogs) planned",
+    "Iron: unknown source location; needed for andesite alloy (nuggets)",
+    "Food: unknown"
+  ],
+  "unverifiedNeedsOverseer": [
+    "Recipes for mechanical press, mechanical saw, mechanical drill/harvester, deployer, belt, chute, funnel, depot, basin, brass: confirm in the jar before a plan uses them",
+    "Whether the pack adds extra industrial blocks (brass/copper decor) - check block ids with mc_find_blocks / jar listing"
+  ],
+  "queue": [
+    "plans/steampunk-p1-workshop.json",
+    "plans/steampunk-p2-power-bank.json"
+  ],
+  "rule": "After finishing a plan, append it to completed, update infrastructure, then take the next file in queue. If the queue is empty, write a note 'QUEUE EMPTY' in the report so the overseer can write the next plans.",
+  "blocked": [],
+  "history": []
+}

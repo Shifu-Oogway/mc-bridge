@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__mc-bridge__mc_instances",
+      "mcp__mc-bridge__mc_observe",
+      "mcp__mc-bridge__mc_terrain",
+      "mcp__mc-bridge__mc_find_blocks",
+      "mcp__mc-bridge__mc_blocks",
+      "mcp__mc-bridge__mc_look",
+      "mcp__mc-bridge__mc_move",
+      "mcp__mc-bridge__mc_goto",
+      "mcp__mc-bridge__mc_stop",
+      "mcp__mc-bridge__mc_interact",
+      "mcp__mc-bridge__mc_hotbar",
+      "mcp__mc-bridge__mc_screen",
+      "mcp__mc-bridge__mc_click_slot",
+      "mcp__mc-bridge__mc_craft",
+      "mcp__mc-bridge__mc_mine",
+      "mcp__mc-bridge__mc_place"
+    ]
+  }
+}

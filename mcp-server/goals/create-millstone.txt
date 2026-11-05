@@ -1,0 +1,28 @@
+Build a small working Create machine: a hand crank that turns a millstone, and prove it works by grinding
+cobblestone into gravel.
+
+Where things stand (check with mc_observe first; this may be out of date):
+- You are underground in a tunnel near x=1080, y=53, z=-325 (survival, peaceful).
+- Inventory should include: 2 raw iron, ~29 cobblestone, 3 coal, ~13 acacia planks, 1 acacia log, a furnace,
+  a stone pickaxe, a stone axe, 2 sticks.
+- A crafting table stands at x=1089, y=57, z=-329 (up the tunnel to the east). Another is on the surface at
+  x=1082, y=64, z=-331.
+- Andesite is buried just below and west of you around x=1077..1080, y=50..51, z=-327..-324 (stone above it).
+  Dig down to it from the side; never dig the block under your feet.
+
+Steps:
+1. Mine 8 andesite.
+2. Place the furnace, smelt the 2 raw iron with coal into 2 iron ingots; craft them into iron nuggets.
+3. At a crafting table craft 4 create:andesite_alloy (each: 2 andesite + 2 iron nuggets).
+4. Craft create:shaft from 2 alloy (gives 8), then create:cogwheel from 1 shaft + 1 plank.
+5. Strip the acacia log: place it, hold the stone axe, look at it and mc_interact use. Then hold an andesite alloy
+   and mc_interact use on the stripped log: it becomes create:andesite_casing. Mine it to pick it up.
+6. Craft create:millstone (cogwheel on top, andesite casing in the middle, a stone-type block such as stone or
+   andesite at the bottom) and create:hand_crank (3 planks over 1 alloy).
+7. Place the millstone somewhere open, then place the hand crank directly against the millstone's bottom or top
+   face so its axis is vertical. Check with mc_blocks that both are there and how the crank faces.
+8. Hold cobblestone and mc_interact use on the millstone to insert it. Then look at the hand crank and hold
+   mc_interact use for ~100 ticks to turn it (repeat a few times). Right-click the millstone with an empty hand
+   to take the output. Success = gravel in the inventory.
+
+Reply DONE with a short summary when gravel comes out, or explain exactly where you got stuck.
