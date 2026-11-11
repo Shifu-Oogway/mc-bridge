@@ -1,0 +1,22 @@
+{
+  "name": "Drill: craft a chest, place it and store items",
+  "context": "Containers practice. Needs 8 planks (any wood). Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "craft a chest",
+      "maxSteps": 35,
+      "check": {
+        "gain": {
+          "minecraft:chest": 1
+        }
+      },
+      "goal": "Craft 1 chest (8 planks in a ring) at a crafting table with mc_craft chest; craft planks from logs first if you have fewer than 8. mc_craft handles the crafting table by itself (uses one within 6 blocks, or places yours or makes one from 4 planks, and picks it back up)."
+    },
+    {
+      "name": "place the chest and store items",
+      "maxSteps": 35,
+      "goal": "Place the chest on the ground 2 blocks away (mc_place item=chest). Open it (mc_look at it, mc_interact use). Move every stack of dirt, gravel, sand and seeds you carry into it with mc_click_slot mode=quick_move on your inventory slots (mc_observe lists the slots). If you carry none of those, move 1 stack of cobblestone instead.",
+      "verify": "the chest block exists where you placed it (mc_blocks) and mc_observe shows those items left your inventory."
+    }
+  ]
+}

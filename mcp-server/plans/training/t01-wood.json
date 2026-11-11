@@ -1,0 +1,56 @@
+{
+  "name": "Wood basics: logs, planks, sticks, crafting table, wooden pickaxe",
+  "context": "Tier 1, starts from an empty inventory. Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "chop 6 logs",
+      "maxSteps": 40,
+      "check": {
+        "gain": {
+          "minecraft:*_log": 6
+        }
+      },
+      "goal": "Get 6 logs from the nearest tree. mc_mine block=#minecraft:logs count=6 radius=32 does it in one call: it finds the nearest exposed logs, walks to each and picks up the drops (bare hands work). If it stops early, call it again for the rest."
+    },
+    {
+      "name": "craft 12 planks",
+      "maxSteps": 15,
+      "check": {
+        "gain": {
+          "minecraft:*_planks": 12
+        }
+      },
+      "goal": "Turn logs into at least 12 planks: mc_craft the planks matching your log type (oak_log -> oak_planks, spruce_log -> spruce_planks, ...) with times=3 (each log gives 4 planks)."
+    },
+    {
+      "name": "craft 4 sticks",
+      "maxSteps": 10,
+      "check": {
+        "gain": {
+          "minecraft:stick": 4
+        }
+      },
+      "goal": "Craft 4 sticks: mc_craft stick (2 planks give 4 sticks)."
+    },
+    {
+      "name": "craft a crafting table",
+      "maxSteps": 10,
+      "check": {
+        "gain": {
+          "minecraft:crafting_table": 1
+        }
+      },
+      "goal": "Craft 1 crafting_table (4 planks, 2x2 recipe) with mc_craft crafting_table."
+    },
+    {
+      "name": "craft a wooden pickaxe",
+      "maxSteps": 30,
+      "check": {
+        "gain": {
+          "minecraft:wooden_pickaxe": 1
+        }
+      },
+      "goal": "Craft a wooden_pickaxe (3 planks + 2 sticks) at a crafting table. mc_craft handles the crafting table by itself (uses one within 6 blocks, or places yours or makes one from 4 planks, and picks it back up). Then mc_craft wooden_pickaxe."
+    }
+  ]
+}

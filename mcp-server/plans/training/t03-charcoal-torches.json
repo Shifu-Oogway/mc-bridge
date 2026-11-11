@@ -1,0 +1,36 @@
+{
+  "name": "Fuel and light: smelt charcoal, craft torches",
+  "context": "Tier 3. Needs a furnace (in inventory or placed nearby); an axe helps. Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "chop 5 logs",
+      "maxSteps": 35,
+      "check": {
+        "gain": {
+          "minecraft:*_log": 5
+        }
+      },
+      "goal": "Get 5 logs: mc_mine block=#minecraft:logs count=5 radius=32 (one call; repeat if it stops early). Hold the axe for speed (mc_hotbar)."
+    },
+    {
+      "name": "smelt 3 charcoal",
+      "maxSteps": 60,
+      "check": {
+        "gain": {
+          "minecraft:charcoal": 3
+        }
+      },
+      "goal": "Call mc_smelt first: it finds a furnace within 6 blocks by itself (one may already stand nearby). Only if it says there is none and you carry none, craft one (8 cobblestone at a crafting table). Smelt logs into at least 3 charcoal with mc_smelt item=<your log, e.g. oak_log> count=3: it uses a furnace within 6 blocks or places the one you carry, adds fuel from your inventory, waits and collects the charcoal. If the result says some are still smelting, call mc_smelt with count=0 to collect them. Afterwards mine the furnace back (mc_mine pos; its position is in the result) so you carry it to the next job."
+    },
+    {
+      "name": "craft 8 torches",
+      "maxSteps": 15,
+      "check": {
+        "gain": {
+          "minecraft:torch": 8
+        }
+      },
+      "goal": "Craft at least 8 torches (1 charcoal or coal above 1 stick gives 4): mc_craft torch times=2. Make sticks first if you have fewer than 2."
+    }
+  ]
+}

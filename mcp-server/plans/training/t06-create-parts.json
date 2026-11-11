@@ -1,0 +1,54 @@
+{
+  "name": "Create: shafts, cogwheels, hand crank",
+  "context": "Tier 6. Needs andesite alloy (tier 5) and planks. Recipes: 2 alloy -> 8 create:shaft; 1 shaft + 1 plank -> create:cogwheel; create:hand_crank uses planks and 1 alloy. Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "be outside",
+      "maxSteps": 20,
+      "check": {
+        "surface": true
+      },
+      "goal": "Be outside under open sky (you need trees for wood in this plan). If you are underground, dig a staircase up: mc_dig direction=<north/south/east/west> stairs=true up=true length=32; it stops by itself on open ground. If it stops early, read why and continue in another direction."
+    },
+    {
+      "name": "have 3 andesite alloy",
+      "maxSteps": 80,
+      "check": {
+        "inventory": {
+          "create:andesite_alloy": 3
+        }
+      },
+      "goal": "You need 3 create:andesite_alloy. If you have fewer, make more: 2 andesite + 2 iron nuggets each at a crafting table (get andesite by mining it or crafting diorite + cobblestone; nuggets from an iron ingot)."
+    },
+    {
+      "name": "craft 8 shafts",
+      "maxSteps": 25,
+      "check": {
+        "gain": {
+          "create:shaft": 8
+        }
+      },
+      "goal": "At a crafting table craft create:shaft once (2 andesite alloy give 8 shafts). mc_craft handles the crafting table by itself (uses one within 6 blocks, or places yours or makes one from 4 planks, and picks it back up)."
+    },
+    {
+      "name": "craft 2 cogwheels",
+      "maxSteps": 20,
+      "check": {
+        "gain": {
+          "create:cogwheel": 2
+        }
+      },
+      "goal": "At a crafting table craft 2 create:cogwheel (each 1 shaft + 1 plank): mc_craft create:cogwheel times=2. Craft planks from a log first if you have none."
+    },
+    {
+      "name": "craft a hand crank",
+      "maxSteps": 20,
+      "check": {
+        "gain": {
+          "create:hand_crank": 1
+        }
+      },
+      "goal": "At a crafting table craft 1 create:hand_crank with mc_craft create:hand_crank (planks + 1 andesite alloy). If mc_craft reports missing ingredients, get them and retry."
+    }
+  ]
+}

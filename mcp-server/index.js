@@ -37,6 +37,20 @@ async function call(conn, route, timeoutMs = 4000, body = undefined) {
   return out;
 }
 
+/** World actions close any open screen first (inventory, container, crafting table), as a player presses Esc. */
+async function closeScreen(conn) {
+  const o = await call(conn, "/observe");
+  if (!o.screen) return false;
+  await call(conn, "/screen", 4000, { action: "close" });
+  return true;
+}
+
+/** Open sky above `feet` (nothing solid for 40 blocks above the head; leaves and logs don't count): truly outside. */
+async function openSky(conn, feet) {
+  const col = Array.from({ length: 40 }, (_, k) => ({ x: feet.x, y: feet.y + 2 + k, z: feet.z }));
+  return !(await call(conn, "/blocks", 4000, { positions: col })).blocks.some((b) => b.solid && !/leaves|_log$|_wood$/.test(b.id));
+}
+
 /** Live instances only: a connection file can outlive a crashed game, so each one is pinged. */
 async function liveInstances() {
   const found = [];
@@ -205,6 +219,7 @@ server.tool(
   async ({ yaw, pitch, at, instance }) => {
     try {
       const inst = await pick(instance);
+      await closeScreen(inst.conn);
       const body = at ? { at } : { ...(yaw !== undefined && { yaw }), ...(pitch !== undefined && { pitch }) };
       return text(await call(inst.conn, "/look", 4000, body));
     } catch (e) { return fail(e); }
@@ -229,6 +244,7 @@ server.tool(
   async ({ keys, ticks, instance }) => {
     try {
       const inst = await pick(instance);
+      await closeScreen(inst.conn);
       return text(await call(inst.conn, "/move", ticks * 50 + 6000, { keys, ticks }));
     } catch (e) { return fail(e); }
   },
@@ -255,6 +271,7 @@ server.tool(
   async ({ instance, ...args }) => {
     try {
       const inst = await pick(instance);
+      await closeScreen(inst.conn);
       return text(await call(inst.conn, "/goto", 66000, args));
     } catch (e) { return fail(e); }
   },
@@ -270,15 +287,26 @@ server.tool(
     "`ticks` (20 = 1 second, max 200) the button is held: holding attack mines the targeted block and stops as soon " +
     "as it breaks; holding use keeps eating/drawing a bow or places repeatedly. Returns the target before and after, " +
     "the targeted block before/after with blockBroken, and the held item. Holds are interrupted by the human's input " +
-    "or an open screen, like mc_move. An inventory or container screen left open is closed first. Requires actions to be enabled in the game's mcbridge/config.json.",
+    "or an open screen, like mc_move. An inventory or container screen left open is closed first. `item` first puts " +
+    "that item in your hand (moving it to the hotbar if needed), or \"empty\" selects an empty hand. Requires actions to be enabled in the game's mcbridge/config.json.",
   {
     action: z.enum(["attack", "use"]),
     ticks: z.number().int().min(1).max(MAX_HOLD_TICKS).optional().describe("Hold for this many ticks; omit for one click"),
+    item: z.string().optional().describe("Hold this item first (e.g. \"stone_axe\"), or \"empty\" for an empty hand"),
     instance: instanceArg,
   },
-  async ({ action, ticks, instance }) => {
+  async ({ action, ticks, item, instance }) => {
     try {
       const inst = await pick(instance);
+      await closeScreen(inst.conn);
+      if (item === "empty") {
+        const inv = (await call(inst.conn, "/observe")).inventory;
+        const free = [0, 1, 2, 3, 4, 5, 6, 7, 8].find((n) => !inv.some((i) => i.slot === n));
+        if (free === undefined) throw new Error("no empty hotbar slot for an empty hand; store or drop something first");
+        await call(inst.conn, "/hotbar", 4000, { slot: free });
+      } else if (item) {
+        await holdItem(inst.conn, fullId(item));
+      }
       let r = await call(inst.conn, "/interact", (ticks ?? 1) * 50 + 6000, { action, ...(ticks && { ticks }) });
       // The first right-click after closing a screen is sometimes swallowed: if a container block didn't open, retry once.
       if (action === "use" && !ticks && r.targetBefore?.type === "block" && INTERACTIVE.test(r.targetBefore.id ?? "") && !/door|gate|trapdoor|lever|button|bell|note_block|repeater|comparator/.test(r.targetBefore.id)) {
@@ -359,7 +387,9 @@ server.tool(
 server.tool(
   "mc_craft",
   "Craft an item by id (e.g. \"oak_planks\", \"minecraft:stick\") with the open inventory (2x2 grid) or crafting " +
-    "table (3x3), using the game's recipe book placement, then shift-click the result into the inventory. `times` " +
+    "table (3x3), using the game's recipe book placement, then shift-click the result into the inventory. Screens are " +
+    "handled for you: 2x2 recipes use your inventory; 3x3 recipes use a crafting table within 6 blocks, or place the " +
+    "one you carry (or make one from 4 planks) and pick it back up afterwards. `times` " +
     "repeats the recipe (default 1); `all` crafts as many as the ingredients allow. Errors say if ingredients are " +
     "missing or a crafting table is needed. Returns the recipe used, how many items were gained, and the container. " +
     "Requires actions.",
@@ -372,10 +402,72 @@ server.tool(
   async ({ instance, ...args }) => {
     try {
       const inst = await pick(instance);
-      return text(await call(inst.conn, "/craft", 6000, args));
+      // No screen open: open the player's inventory first, so 2x2 recipes work in one call.
+      const o = await call(inst.conn, "/observe");
+      // No screen, or one that cannot craft (furnace, chest...): use the player's inventory (2x2) instead.
+      const opened = !o.screen || o.container?.canCraft !== true;
+      if (opened) {
+        if (o.screen) await call(inst.conn, "/screen", 4000, { action: "close" });
+        await call(inst.conn, "/screen", 4000, { action: "open_inventory" });
+      }
+      try {
+        const r = await call(inst.conn, "/craft", 6000, args);
+        return text(opened ? { openedInventory: true, ...r } : r);
+      } catch (e) {
+        if (!/needs a 3x3 grid/.test(e.message ?? "")) throw e;
+      }
+      // 3x3 recipe: get to a crafting table (nearby, carried, or made from planks), craft, and take a placed one back.
+      const table = await openCraftingTable(inst.conn);
+      try {
+        const r = await call(inst.conn, "/craft", 6000, args);
+        return text({ ...r, table: table.pos, ...(table.made && { madeTable: true }), ...(table.placed && { placedTable: true }) });
+      } finally {
+        if (table.placed) {
+          await closeScreen(inst.conn).catch(() => {});
+          await mineOne(inst.conn, table.pos, { collect: true, allowFluids: false, clearObstacles: false }).catch(() => {});
+        }
+      }
     } catch (e) { return fail(e); }
   },
 );
+
+/** Open a crafting table for a 3x3 recipe: one within 6 blocks, else place the carried one, else make one first. */
+async function openCraftingTable(conn) {
+  let pos, placed = false, made = false;
+  const found = await call(conn, "/find", 6000, { block: "minecraft:crafting_table", radius: 6, limit: 1 });
+  if (found.results?.length) pos = found.results[0].pos;
+  else {
+    let inv = (await call(conn, "/observe")).inventory;
+    if (!inv.some((i) => i.id === "minecraft:crafting_table")) {
+      const planks = inv.filter((i) => /_planks$/.test(i.id)).reduce((n, i) => n + i.count, 0);
+      if (planks < 4) throw new Error("this recipe needs a crafting table: none within 6 blocks, none carried, and fewer than 4 planks to make one");
+      const o = await call(conn, "/observe");
+      if (o.container?.canCraft !== true) {
+        if (o.screen) await call(conn, "/screen", 4000, { action: "close" });
+        await call(conn, "/screen", 4000, { action: "open_inventory" });
+      }
+      await call(conn, "/craft", 6000, { item: "minecraft:crafting_table" });
+      made = true;
+    }
+    pos = await placeNearby(conn, "minecraft:crafting_table");
+    placed = true;
+  }
+  if (!(await getInReach(conn, pos))) throw new Error(`could not get within reach of the crafting table at ${pos.x},${pos.y},${pos.z}`);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await closeScreen(conn);
+    if (attempt) await sleep(400);
+    const look = await call(conn, "/look", 4000, { at: { x: pos.x + 0.5, y: pos.y + 0.5, z: pos.z + 0.5 } });
+    if (!same(look.target?.pos, pos)) {
+      await call(conn, "/goto", 20000, { x: pos.x, y: pos.y, z: pos.z, tolerance: 2 }).catch(() => {});
+      continue;
+    }
+    await call(conn, "/interact", 4000, { action: "use" });
+    await sleep(300);
+    const c = (await call(conn, "/observe")).container;
+    if (c?.canCraft && /crafting/.test(c.menu ?? "")) return { pos, placed, made };
+  }
+  throw new Error(`could not open the crafting table at ${pos.x},${pos.y},${pos.z}`);
+}
 
 server.tool(
   "mc_stop",
@@ -415,6 +507,19 @@ async function inspect(conn, positions) {
   return (await call(conn, "/blocks", 4000, { positions })).blocks;
 }
 
+/**
+ * Safety stop for long actions (mc_mine, mc_dig): a reason string when the player's head is under water or health is
+ * low, else null. Checked before every block, so one call can't walk the player into a lake and drown it.
+ */
+const SAFE_HEALTH = 10;
+async function hazard(conn) {
+  const p = (await call(conn, "/observe")).player;
+  const [head] = await inspect(conn, [cell({ x: p.pos.x, y: p.pos.y + 1.6, z: p.pos.z })]);
+  if (/water/.test(`${head.fluid ?? ""} ${head.id}`)) return "your head is under water: get to dry land first (swim up, then toward the shore)";
+  if (p.health < SAFE_HEALTH) return `health is ${p.health}: stopped to avoid dying`;
+  return null;
+}
+
 async function getInReach(conn, pos) {
   let [b] = await inspect(conn, [pos]);
   if (b.inReach) return true;
@@ -424,7 +529,11 @@ async function getInReach(conn, pos) {
 }
 
 /** Mine one block at pos; returns a result record (never throws for in-game reasons). */
-const NATURAL_OBSTACLE = /leaves|grass|fern|vine|snow|flower|sapling|bush|mushroom|dead_bush|kelp|seagrass|azalea|moss_carpet/;
+const NATURAL_OBSTACLE = /leaves|leaf_litter|petals|wildflowers|grass|fern|vine|snow|flower|sapling|bush|mushroom|dead_bush|kelp|seagrass|azalea|moss_carpet/;
+/** Natural ground that never belongs to a build: cleared when it blocks the line of sight (builds use bricks, planks...). */
+const NATURAL_TERRAIN = /^minecraft:(dirt|coarse_dirt|rooted_dirt|grass_block|podzol|mycelium|stone|deepslate|andesite|diorite|granite|tuff|calcite|gravel|sand|red_sand|clay|netherrack)$|_ore$/;
+/** Ground covers only a sliver high: aim at their bottom, or the ray passes over them into the block below. */
+const THIN_COVER = /leaf_litter|petals|wildflowers|carpet/;
 async function mineOne(conn, pos, { collect, allowFluids, clearObstacles = false }, depth = 0) {
   const [b] = await inspect(conn, [pos]);
   const r = { pos, id: b.id };
@@ -445,8 +554,8 @@ async function mineOne(conn, pos, { collect, allowFluids, clearObstacles = false
   const hit = look.target?.pos;
   if (!same(hit, pos)) {
     if (!hit || depth >= 2) return { ...r, outcome: "failed", reason: `can't see it${hit ? `; ${look.target.id} is in the way` : ""}` };
-    // Only plants and snow are cleared on their own; anything built (slabs, fences, machines...) is left alone unless asked.
-    if (!clearObstacles && !NATURAL_OBSTACLE.test(look.target.id)) {
+    // Plants, snow and natural terrain are cleared on their own; anything built (slabs, fences, machines...) is left alone unless asked.
+    if (!clearObstacles && !NATURAL_OBSTACLE.test(look.target.id) && !NATURAL_TERRAIN.test(look.target.id)) {
       return { ...r, outcome: "failed", reason: `${look.target.id} at ${hit.x},${hit.y},${hit.z} is in the way; mine it first on purpose, move to see ${pos.x},${pos.y},${pos.z} from another side, or pass clearObstacles` };
     }
     const cleared = await mineOne(conn, hit, { collect: false, allowFluids, clearObstacles }, depth + 1);
@@ -485,7 +594,8 @@ server.tool(
     "tool (one that gets drops, fastest, saving durability when bare hands are as good), aim, clear one or two " +
     "blocks that are in the line of sight, hold attack until it breaks, then walk over the spot to collect the " +
     "drop. Only leaves, grass and similar plants in the way are cleared automatically; any other block in the line of " +
-    "sight (planks, slabs, fences, machines) makes the mine fail unless clearObstacles is true, so builds stay intact. " +
+    "sight (planks, slabs, fences, machines) makes the mine fail unless clearObstacles is true, so builds stay intact; " +
+    "natural terrain in the way (dirt, stone, gravel, sand, ores...) is mined through. " +
     "Give either `pos` for one block, or `block` (id, *glob or #tag as in mc_find_blocks) and `count` to mine " +
     "the nearest exposed matches one after another, e.g. block \"#minecraft:logs\" count 6 to chop a tree. Skips " +
     "blocks with lava or water beside or above them unless allowFluids, unbreakable ones, and ones no hotbar tool " +
@@ -505,28 +615,51 @@ server.tool(
     try {
       if (!pos === !block) throw new Error("give either pos or block");
       const { conn } = await pick(instance);
+      await closeScreen(conn);
+      const start = await hazard(conn);
+      if (start) throw new Error(start);
       const before = (await call(conn, "/observe")).inventory;
       const results = [];
-      let stopped;
+      let stopped, nearWater = 0;
       if (pos) {
         results.push(await mineOne(conn, cell(pos), { collect, allowFluids, clearObstacles }));
       } else {
         const tried = new Set();
+        let fails = 0;
         while (true) {
           if (results.filter((r) => r.outcome === "mined").length >= count) break;
-          if (results.length >= count * 3) { stopped = "too many failures"; break; }
-          const found = await call(conn, "/find", 6000, { block, radius, limit: 50, exposedOnly: true });
-          const next = found.results.find((f) => !tried.has(`${f.pos.x},${f.pos.y},${f.pos.z}`));
-          if (!next) { stopped = `no more exposed ${block} within ${radius} blocks`; break; }
+          // Every failed target can mean a walk; give up early instead of wandering the terrain.
+          if (fails >= 8 || results.length >= count * 3) { stopped = `too many failures (${fails} in a row)`; break; }
+          const hz = await hazard(conn);
+          if (hz) { stopped = hz; break; }
+          // Exposed blocks anywhere in the radius, plus buried ones already within reach (it digs through natural
+          // stone to them), so a vein in the wall beside you is not walked past. Never the block under your feet.
+          const found = await call(conn, "/find", 6000, { block, radius, limit: 50, exposedOnly: false });
+          const me = (await call(conn, "/observe")).player.pos;
+          const under = cell({ x: me.x, y: me.y - 0.6, z: me.z });
+          const next = found.results.find((f) => !tried.has(`${f.pos.x},${f.pos.y},${f.pos.z}`) && (f.exposed || f.inReach) && !same(f.pos, under));
+          if (!next) { stopped = `no more exposed (or in-reach) ${block} within ${radius} blocks`; break; }
           tried.add(`${next.pos.x},${next.pos.y},${next.pos.z}`);
-          results.push(await mineOne(conn, next.pos, { collect, allowFluids, clearObstacles }));
+          if (!allowFluids) {
+            // Lakeside blocks get refused anyway, but only after walking to them, which led into lakes: skip them here.
+            const around = [];
+            for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) for (let dz = -1; dz <= 1; dz++) {
+              if (dx || dy || dz) around.push({ x: next.pos.x + dx, y: next.pos.y + dy, z: next.pos.z + dz });
+            }
+            if ((await inspect(conn, around)).some((b) => /water|lava/.test(`${b.fluid ?? ""} ${b.id}`))) { nearWater++; continue; }
+          }
+          const r = await mineOne(conn, next.pos, { collect, allowFluids, clearObstacles });
+          results.push(r);
+          fails = r.outcome === "mined" ? 0 : fails + 1;
         }
       }
+      if (!stopped) stopped = (await hazard(conn)) ?? undefined;
       const after = (await call(conn, "/observe")).inventory;
       const summary = {
         mined: results.filter((r) => r.outcome === "mined").length,
         ...(block && { requested: count }),
         ...(stopped && { stopped }),
+        ...(block && nearWater && { skippedNearWater: nearWater }),
         inventoryChange: inventoryDelta(before, after),
       };
       if (verbose) return text({ ...summary, results });
@@ -574,15 +707,24 @@ server.tool(
     "never chests, doors, tables or other blocks that open when clicked), walks within reach if needed, holds the " +
     "item (moving it from the main inventory to the hotbar if necessary; default: whatever is held), aims at that " +
     "face and right-clicks. The target must be replaceable (air, grass, snow layer, water...) and not where the " +
-    "player stands. Returns what is at the position afterwards. Requires actions.",
+    "player stands. Leave out x/y/z (give item) to let it pick a free spot on the ground about 2 blocks away. " +
+    "Returns what is at the position afterwards. Requires actions.",
   {
-    x: z.number(), y: z.number(), z: z.number(),
+    x: z.number().optional(), y: z.number().optional(), z: z.number().optional(),
     item: z.string().optional().describe("Item id to place, e.g. \"cobblestone\"; default the held item"),
     instance: instanceArg,
   },
   async ({ x, y, z: zz, item, instance }) => {
     try {
       const { conn } = await pick(instance);
+      const given = [x, y, zz].filter((v) => v !== undefined).length;
+      if (given === 0) {
+        if (!item) throw new Error("without x/y/z give item, so a spot can be picked for it");
+        const pos = await placeNearby(conn, fullId(item));
+        const [b] = await inspect(conn, [pos]);
+        return text({ placed: b.id, pos, picked: true });
+      }
+      if (given !== 3) throw new Error("give all of x, y and z, or none of them");
       return text(await placeOne(conn, { x, y, z: zz }, item));
     } catch (e) { return fail(e); }
   },
@@ -591,6 +733,7 @@ server.tool(
 /** Place one block (see mc_place); returns the result record or throws with the reason. Shared with settlement tasks. */
 async function placeOne(conn, pos, item) {
       const target = cell(pos);
+      await closeScreen(conn);
       const [here] = await inspect(conn, [target]);
       if (here.loaded === false) throw new Error("that chunk is not loaded");
       // A single snow layer is replaced by placement even though it is not flagged replaceable.
@@ -608,7 +751,8 @@ async function placeOne(conn, pos, item) {
       const plant = !thinSnow && here.replaceable && !here.fluid && !/:(air|cave_air|void_air)$/.test(here.id);
       if (thinSnow || plant) {
         // Clicking the snow layer itself places into its cell; it also hides the face of the block below.
-        const look = await call(conn, "/look", 4000, { at: { x: target.x + 0.5, y: target.y + (thinSnow ? 0.06 : 0.3), z: target.z + 0.5 } });
+        const dy = thinSnow ? 0.06 : THIN_COVER.test(here.id) ? 0.03 : 0.3;
+        const look = await call(conn, "/look", 4000, { at: { x: target.x + 0.5, y: target.y + dy, z: target.z + 0.5 } });
         if (same(look.target?.pos, target)) {
           const use = await call(conn, "/interact", 4000, { action: "use" });
           await sleep(150);
@@ -652,8 +796,17 @@ async function placeOne(conn, pos, item) {
         if (done) done.bridged = true;
       }
       if (done) return done;
+      // Most failures are a target one block too high (e.g. leaf litter or grass taken for the floor): say where the ground is.
+      const below = await inspect(conn, [1, 2, 3, 4, 5, 6].map((k) => ({ x: target.x, y: target.y - k, z: target.z })));
+      let hint = "";
+      if (!below[0].solid) {
+        const ground = below.find((b) => b.solid);
+        hint = ground
+          ? ` Nothing solid below ${target.x},${target.y},${target.z}: the ground there is at y=${ground.pos.y}, so place at y=${ground.pos.y + 1}.`
+          : ` Nothing solid within 6 blocks below ${target.x},${target.y},${target.z}.`;
+      }
       throw new Error(`no usable face to place against${held ? "" : " (or the held item cannot be placed)"}: ` +
-        "every neighbour is air, fluid, interactive, or hidden from here");
+        "every neighbour is air, fluid, interactive, or hidden from here." + hint);
 }
 
 // ---- bulk tools: one call instead of hundreds -----------------------------------------------------------------------
@@ -713,26 +866,60 @@ server.tool(
     "(down, up, north=-z, south=+z, east=+x, west=-x), walking into each cell after clearing it. Horizontal tunnels are " +
     "2 high (feet and head). Picks the best hotbar tool per block, picks up drops by walking over them. Stops early " +
     "(and says why) at lava/water beside the cell, unbreakable or un-harvestable blocks, or a drop it can't walk. " +
+    "With stairs:true and a horizontal direction it digs a 2-high staircase going DOWN one block per step instead (the " +
+    "safe way to reach stone or go underground; it stops before water/lava and where there is no floor to step on). " +
+    "With stairs:true and up:true it heads for the surface instead: it climbs a staircase where there is a wall ahead, " +
+    "walks across open cave floor toward the next wall, and stops only under open sky: the way out of any hole or cave. " +
     "Returns the end position, cells dug and the inventory change only. Pair with mc_mine/mc_find_blocks for ore. Requires actions.",
   {
     direction: z.enum(["down", "up", "north", "south", "east", "west"]),
     length: z.number().int().min(1).max(64),
+    stairs: z.boolean().optional().describe("With north/south/east/west: a staircase going down, 1 block per step"),
+    up: z.boolean().optional().describe("With stairs: go up instead; stops on reaching open ground"),
     instance: instanceArg,
   },
-  async ({ direction, length, instance }) => {
+  async ({ direction, length, stairs = false, up = false, instance }) => {
     try {
+      if (stairs && (direction === "up" || direction === "down")) throw new Error("stairs needs north, south, east or west");
+      if (up && !stairs) throw new Error("up only works together with stairs:true");
       const { conn } = await pick(instance);
+      await closeScreen(conn);
+      const start = await hazard(conn);
+      if (start) throw new Error(start);
       const before = (await call(conn, "/observe")).inventory;
       const d = DIGS[direction];
       let me = (await call(conn, "/observe")).player.pos;
       let at = cell({ x: me.x, y: me.y + 0.1, z: me.z });
-      let dug = 0, stopped;
+      let dug = 0, stopped, reachedTop = false;
       for (let i = 0; i < length; i++) {
-        const next = add(at, d);
-        const cellsToClear = d[1] === 0 ? [next, add(next, [0, 1, 0])] : [next];
+        const hz = await hazard(conn);
+        if (hz) { stopped = hz; break; }
+        // Staircase step down: clear head height, feet height and one below ahead, then step forward and down.
+        // Staircase step up: the block ahead is the step; clear above it (feet, head) and above our own head, then step up.
+        const climb = stairs && up;
+        let next = climb ? add(at, [d[0], 1, d[2]]) : stairs ? add(at, [d[0], -1, d[2]]) : add(at, d);
+        let cellsToClear = climb ? [add(at, [0, 2, 0]), add(next, [0, 1, 0]), next]
+          : stairs ? [add(next, [0, 2, 0]), add(next, [0, 1, 0]), next]
+          : d[1] === 0 ? [next, add(next, [0, 1, 0])] : [next];
+        if (climb) {
+          // Done only under open sky; a cave or tunnel is not "the top".
+          if (await openSky(conn, at)) { reachedTop = true; break; }
+          const ahead = add(at, [d[0], 0, d[2]]);
+          const [step, floor] = await inspect(conn, [ahead, add(ahead, [0, -1, 0])]);
+          if (!step.solid) {
+            // Open floor ahead (a cave): walk one block toward the next wall instead of stopping.
+            if (!floor.solid) { stopped = `drop ahead at ${ahead.x},${ahead.y - 1},${ahead.z} (${floor.id.replace("minecraft:", "")}); try another direction`; break; }
+            next = ahead;
+            cellsToClear = [add(ahead, [0, 1, 0])];
+          }
+        } else if (stairs) {
+          const [floor] = await inspect(conn, [add(next, [0, -1, 0])]);
+          if (!floor.solid) { stopped = `no floor to step on at ${next.x},${next.y - 1},${next.z} (${floor.id.replace("minecraft:", "")})`; break; }
+        }
         for (const c of cellsToClear) {
           const [b] = await inspect(conn, [c]);
-          if (/^minecraft:(air|cave_air)$/.test(b.id)) continue;
+          // Air, and plants/leaf litter you can walk through, need no digging.
+          if (/^minecraft:(air|cave_air)$/.test(b.id) || (b.replaceable && !b.fluid)) continue;
           const r = await mineOne(conn, c, { collect: false, allowFluids: false, clearObstacles: true });
           if (r.outcome !== "mined") { stopped = `${r.outcome} at ${c.x},${c.y},${c.z} (${b.id.replace("minecraft:", "")}): ${r.reason}`; break; }
         }
@@ -752,7 +939,215 @@ server.tool(
       await sleep(400); // let the last drops settle, then sweep any nearby
       await collectNear(conn, at).catch(() => {});
       const after = (await call(conn, "/observe")).inventory;
-      return text({ dug, end: at, ...(stopped && { stopped }), inventoryChange: inventoryDelta(before, after) });
+      return text({ dug, end: at, ...(reachedTop && { reachedTop: true }), ...(stopped && { stopped }), inventoryChange: inventoryDelta(before, after) });
+    } catch (e) { return fail(e); }
+  },
+);
+
+// ---- smelting: one call instead of ~20 slot clicks and waits ------------------------------------------------------
+
+/** Burn time in ticks per fuel item (a furnace smelts one item per 200 ticks). */
+const FUELS = [[/^minecraft:(coal|charcoal)$/, 1600], [/_planks$/, 300], [/(_log|_wood|_stem|_hyphae)$/, 300], [/^minecraft:stick$/, 100]];
+const fuelTicks = (id) => (FUELS.find(([re]) => re.test(id)) ?? [null, 0])[1];
+function fuelRank(id, items) {
+  const kind = /(coal|charcoal)$/.test(id) ? "coal" : /_planks$/.test(id) ? "planks" : /stick$/.test(id) ? "stick" : "log";
+  const order = items >= 6 ? ["coal", "planks", "log", "stick"] : ["planks", "log", "coal", "stick"];
+  return order.indexOf(kind);
+}
+const SMELT_WAIT_MS = 45000; // stays below MCP client timeouts; count=0 collects the rest later
+
+/** Place `id` from the inventory on floor level about 2 blocks away; returns its position. */
+async function placeNearby(conn, id) {
+  const me = (await call(conn, "/observe")).player.pos;
+  const feet = cell({ x: me.x, y: me.y + 0.4, z: me.z });
+  // A ring 2-3 blocks out, nearest first, at heights -2..+1: uneven ground (slopes, forest floor) still has spots.
+  const ring = [];
+  for (let dx = -3; dx <= 3; dx++) for (let dz = -3; dz <= 3; dz++) {
+    const d = Math.max(Math.abs(dx), Math.abs(dz));
+    if (d >= 2) ring.push([dx, dz, Math.hypot(dx, dz)]);
+  }
+  ring.sort((a, b) => a[2] - b[2]);
+  for (const [dx, dz] of ring) {
+    for (const dy of [0, -1, 1, -2]) {
+      const at = { x: feet.x + dx, y: feet.y + dy, z: feet.z + dz };
+      const [here, below] = await inspect(conn, [at, add(at, [0, -1, 0])]);
+      if (!here.replaceable || here.fluid || !below.solid) continue;
+      try { await placeOne(conn, at, id); return at; } catch { /* try the next spot */ }
+    }
+  }
+  throw new Error(`found no spot to place ${id} near you`);
+}
+
+/** Move `n` items `id` from the player's inventory into menu slot `target`, one right-click per item. */
+async function loadSlot(conn, id, n, target) {
+  let left = n;
+  for (let guard = 0; left > 0 && guard < 10; guard++) {
+    const c = (await call(conn, "/observe")).container;
+    const src = c.slots.find((x) => x.id === id && (x.section === "inventory" || x.section === "hotbar"));
+    if (!src) break;
+    await call(conn, "/click", 4000, { slot: src.slot, mode: "pickup", button: "left" });
+    const k = Math.min(left, src.count);
+    for (let i = 0; i < k; i++) await call(conn, "/click", 4000, { slot: target, mode: "pickup", button: "right" });
+    left -= k;
+    if ((await call(conn, "/observe")).container?.carried) await call(conn, "/click", 4000, { slot: src.slot, mode: "pickup", button: "left" });
+  }
+  return n - left;
+}
+
+server.tool(
+  "mc_smelt",
+  "Smelt items in a furnace in ONE call: uses a furnace within 6 blocks (or places the one you carry about 2 blocks " +
+    "away), puts `count` of `item` in, adds enough fuel from your inventory (coal, charcoal, planks, logs or sticks; " +
+    "`fuel` picks one), waits until they are done (10 s per item, up to 45 s) and takes the output. If some are still " +
+    "smelting when it returns, call it again with count 0 to wait for and collect the rest. Requires actions.",
+  {
+    item: z.string().describe("What to smelt, e.g. \"raw_iron\", \"oak_log\""),
+    count: z.number().int().min(0).max(64).describe("How many; 0 = only wait for and collect what is already smelting"),
+    fuel: z.string().optional(),
+    instance: instanceArg,
+  },
+  async ({ item, count, fuel, instance }) => {
+    try {
+      const { conn } = await pick(instance);
+      await closeScreen(conn);
+      const start = await hazard(conn);
+      if (start) throw new Error(start);
+      const id = fullId(item);
+      const before = (await call(conn, "/observe")).inventory;
+      const have = (x) => before.filter((i) => i.id === x).reduce((n, i) => n + i.count, 0);
+      if (have(id) < count) throw new Error(`you have ${have(id)} ${id}, need ${count}`);
+
+      let furnace, placed = false;
+      const found = await call(conn, "/find", 6000, { block: "minecraft:furnace", radius: 6, limit: 1 });
+      if (found.results?.length) furnace = found.results[0].pos;
+      else if (have("minecraft:furnace")) { furnace = await placeNearby(conn, "minecraft:furnace"); placed = true; }
+      else throw new Error("no furnace within 6 blocks and none in your inventory (craft one: 8 cobblestone)");
+
+      if (!(await getInReach(conn, furnace))) throw new Error(`could not get within reach of the furnace at ${furnace.x},${furnace.y},${furnace.z}`);
+      // Right after another screen closed the click can be ignored, or the aim can land on something else: retry once.
+      let c = null;
+      for (let attempt = 0; attempt < 2 && !(c && /furnace/.test(c.menu ?? "")); attempt++) {
+        if (attempt) { await closeScreen(conn); await sleep(400); }
+        const look = await call(conn, "/look", 4000, { at: { x: furnace.x + 0.5, y: furnace.y + 0.5, z: furnace.z + 0.5 } });
+        if (!same(look.target?.pos, furnace)) {
+          if (attempt) throw new Error(`can't see the furnace at ${furnace.x},${furnace.y},${furnace.z}${look.target?.id ? `: ${look.target.id} is in the way` : ""}`);
+          await call(conn, "/goto", 20000, { x: furnace.x, y: furnace.y, z: furnace.z, tolerance: 2 }).catch(() => {});
+          continue;
+        }
+        await call(conn, "/interact", 4000, { action: "use" });
+        await sleep(300);
+        c = (await call(conn, "/observe")).container;
+      }
+      if (!c || !/furnace/.test(c.menu ?? "")) throw new Error("the furnace did not open");
+      const at = (n) => c.slots.find((x) => x.slot === n);
+
+      // Output from earlier smelting belongs to the player: take it first.
+      if (at(2)) { await call(conn, "/click", 4000, { slot: 2, mode: "quick_move" }); c = (await call(conn, "/observe")).container; }
+      if (at(0) && at(0).id !== id && count > 0) throw new Error(`the furnace is busy smelting ${at(0).id}; use another furnace or wait`);
+      const loaded = count > 0 ? await loadSlot(conn, id, count, 0) : 0;
+
+      // Fuel for everything in the input slot, minus what is already in the fuel slot.
+      c = (await call(conn, "/observe")).container;
+      const toSmelt = at(0)?.count ?? 0;
+      let fuelUsed = null;
+      const needTicks = toSmelt * 200 - (at(1) ? fuelTicks(at(1).id) * at(1).count : 0);
+      if (needTicks > 0) {
+        const inv = c.slots.filter((x) => x.section === "inventory" || x.section === "hotbar");
+        const candidates = fuel ? [fullId(fuel)] : [...new Set(inv.map((x) => x.id))]
+          .filter((x) => fuelTicks(x) > 0 && x !== id && (!at(1) || at(1).id === x))
+          // Coal/charcoal (8 items each) only pays off for big batches; small ones burn planks or logs. Sticks last:
+          // they are needed for tools and torches.
+          .sort((a, b) => fuelRank(a, toSmelt) - fuelRank(b, toSmelt));
+        const f = candidates[0];
+        if (!f) throw new Error("no fuel in your inventory (coal, charcoal, planks, logs or sticks)");
+        const units = Math.ceil(needTicks / fuelTicks(f));
+        const put = await loadSlot(conn, f, units, 1);
+        fuelUsed = { id: f, count: put, ...(put < units && { warning: `only ${put} of the ${units} needed` }) };
+      }
+
+      // Wait for the output.
+      const deadline = Date.now() + Math.min(SMELT_WAIT_MS, toSmelt * 10000 + 8000); // the furnace starts a moment late
+      let out = 0;
+      while (Date.now() < deadline) {
+        await sleep(2000);
+        c = (await call(conn, "/observe")).container;
+        if (!c) break;
+        out = at(2)?.count ?? 0;
+        if (out >= toSmelt) break;
+      }
+      const outId = c ? at(2)?.id : undefined;
+      if (c && out > 0) await call(conn, "/click", 4000, { slot: 2, mode: "quick_move" });
+      c = (await call(conn, "/observe")).container;
+      const still = c ? at(0)?.count ?? 0 : 0;
+      await call(conn, "/screen", 4000, { action: "close" }).catch(() => {});
+      const after = (await call(conn, "/observe")).inventory;
+      return text({
+        loaded, collected: out, ...(outId && { output: outId }),
+        ...(still && { stillSmelting: still, next: `call mc_smelt item=${item} count=0 in about ${still * 10} s to collect them` }),
+        furnace, ...(placed && { placedFurnace: true, note: "mine the furnace back (mc_mine pos) to take it with you" }),
+        ...(fuelUsed && { fuel: fuelUsed }), inventoryChange: inventoryDelta(before, after),
+      });
+    } catch (e) { return fail(e); }
+  },
+);
+
+// ---- dropping items onto a block (millstone input, etc.) ---------------------------------------------------------
+
+server.tool(
+  "mc_drop",
+  "Drop items onto the top of a block in ONE call, e.g. cobblestone into a millstone (it takes items that fall onto " +
+    "it). Stands on top of the block, looks straight down and throws `count` items one by one (thrown from beside, " +
+    "most land short), then steps back to where you were. Returns how many left your inventory and how many still " +
+    "lie loose on top (0 = all went in). Requires actions.",
+  {
+    item: z.string(),
+    count: z.number().int().min(1).max(64),
+    onto: z.object({ x: z.number().int(), y: z.number().int(), z: z.number().int() }).describe("The block to drop onto"),
+    instance: instanceArg,
+  },
+  async ({ item, count, onto, instance }) => {
+    try {
+      const { conn } = await pick(instance);
+      await closeScreen(conn);
+      const id = fullId(item);
+      const before = (await call(conn, "/observe")).inventory;
+      const have = before.filter((i) => i.id === id).reduce((n, i) => n + i.count, 0);
+      if (have < count) throw new Error(`you have ${have} ${id}, need ${count}`);
+      const back = (await call(conn, "/observe")).player.pos;
+      const top = { x: onto.x, y: onto.y + 1, z: onto.z };
+      const onTop = async () => { const me = (await call(conn, "/observe")).player.pos; return same(cell({ x: me.x, y: me.y + 0.1, z: me.z }), top); };
+      // Straight onto the top; if the path fails (slopes), step up from a free cell beside it.
+      await call(conn, "/goto", 20000, { ...top, tolerance: 0 }).catch(() => {});
+      if (!(await onTop())) {
+        for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const side = { x: onto.x + dx, y: onto.y, z: onto.z + dz };
+          const [here, head, floor] = await inspect(conn, [side, add(side, [0, 1, 0]), add(side, [0, -1, 0])]);
+          if (!here.replaceable || here.fluid || !head.replaceable || !floor.solid) continue;
+          await call(conn, "/goto", 20000, { ...side, tolerance: 0 }).catch(() => {});
+          await call(conn, "/goto", 20000, { ...top, tolerance: 0 }).catch(() => {});
+          if (await onTop()) break;
+        }
+      }
+      if (!(await onTop())) throw new Error(`could not stand on top of ${onto.x},${onto.y},${onto.z}; make a step beside it (place a block) and retry`);
+      await call(conn, "/look", 4000, { pitch: 90 });
+      let c = (await call(conn, "/screen", 4000, { action: "open_inventory" })).container;
+      let thrown = 0;
+      while (thrown < count) {
+        const src = c.slots.find((x) => x.id === id && (x.section === "inventory" || x.section === "hotbar"));
+        if (!src) break;
+        const k = Math.min(count - thrown, src.count);
+        for (let i = 0; i < k; i++) { await call(conn, "/click", 4000, { slot: src.slot, mode: "throw" }); await sleep(250); }
+        thrown += k;
+        c = (await call(conn, "/observe")).container;
+      }
+      await call(conn, "/screen", 4000, { action: "close" }).catch(() => {});
+      await sleep(1500);
+      const o = await call(conn, "/observe");
+      const loose = (o.entities ?? []).filter((e) => /item/.test(e.id) && Math.abs(e.pos.x - (onto.x + 0.5)) < 0.8 &&
+        Math.abs(e.pos.z - (onto.z + 0.5)) < 0.8 && e.pos.y >= onto.y + 0.9 && e.pos.y < onto.y + 1.6).length;
+      await call(conn, "/goto", 20000, { x: Math.floor(back.x), y: Math.floor(back.y + 0.1), z: Math.floor(back.z), tolerance: 1 }).catch(() => {});
+      const after = (await call(conn, "/observe")).inventory;
+      return text({ thrown, onto, looseOnTop: loose, inventoryChange: inventoryDelta(before, after) });
     } catch (e) { return fail(e); }
   },
 );

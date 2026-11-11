@@ -11,8 +11,10 @@
 // A plan is written by a planner (e.g. Claude) and played by the local model, one small step at a time:
 //   { "steps": [ { "name": "...", "goal": "...", "maxSteps": 40,
 //                  "check": { "inventory": { "minecraft:andesite": 8 } } }, ... ] }
-// After each step the runner verifies `check` itself from mc_observe (minimum item counts), skips steps already
-// satisfied, retries a failed step once with feedback, and stops the plan if it still fails. A short report
+// After each step the runner verifies `check` itself from mc_observe: "inventory" = minimum item counts held,
+// "gain" = minimum increase since the step started (replayable on a persistent world); ids may use * wildcards
+// ("minecraft:*_log"). It skips steps whose absolute check is already satisfied, retries a failed step once with
+// feedback, and stops the plan if it still fails. A short report
 // (run-logs/report-*.json) says what happened, so the planner never has to read the full log.
 //
 // The human stops it by pressing one of --stop-keys (default W,A,S,D,Space,Esc) during an action, or Ctrl+C.
@@ -82,6 +84,7 @@ function parseArgs(argv) {
     else if (k === "--teacher-model") a.teacherModel = v();
     else if (k === "--full-tools") a.fullTools = true;
     else if (k === "--actor") { a.actor = v(); if (!["teacher", "student"].includes(a.actor)) throw new Error("--actor must be teacher or student"); }
+    else if (k === "--exclude") a.exclude.push(...v().split(",").map((t) => t.trim()).filter(Boolean)); // hide tools from the model
     else if (k === "--allow-chat") a.exclude = a.exclude.filter((t) => t !== "mc_chat");
     else if (k === "--stop-keys") a.stopKeys = v().split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
     else throw new Error(`unknown argument ${k}`);
@@ -99,15 +102,25 @@ How the world works here:
 - Coordinates: x east, z south, y up. The player's feet are at y; the block below the feet is the floor (y-1).
 - Start with mc_observe to learn position, inventory and surroundings. Re-observe when unsure.
 - mc_find_blocks finds blocks; "exposed" means at least one face touches air. Ores and stone are often buried.
-- mc_mine with "block" only mines EXPOSED matches. To reach buried blocks, mine specific positions with "pos",
-  digging a 2-block-high tunnel or a staircase (each step down: clear 3 blocks: head, body, new floor level).
+- mc_mine with "block" only mines EXPOSED matches. To reach buried blocks, dig with mc_dig: a tunnel
+  (direction north/south/east/west) or a staircase going down (add stairs:true). Single blocks: mc_mine with "pos".
+- In a hole, cave or tunnel and need the surface: dig a staircase up, mc_dig direction=<north/south/east/west>
+  stairs:true up:true length=16; it stops by itself on open ground. Jump+place pillars do not work.
   Never dig the block directly under your own feet.
+- Stay out of deep water and lakes: pathfinding does not work while swimming, and you can drown. Never use
+  allowFluids while you are in water. If a tool says you are in water, get out first (mc_move jump to the surface,
+  then toward land) before doing anything else.
 - mc_goto without y picks the standable floor nearest your height; a 1-block-high tunnel is not standable. Give y
   when you mean a specific level. Drops are picked up by walking over them (mc_mine does this by itself).
-- Crafting: mc_craft needs a crafting screen open: mc_screen open_inventory for 2x2 recipes, or place a crafting
-  table and right-click it (mc_look at it, then mc_interact use) for 3x3 recipes.
-- Smelting: place a furnace, open it with mc_look + mc_interact use, put the item to smelt and fuel (coal/planks)
-  in with mc_click_slot, wait, then take the output.
+- Crafting: mc_craft handles the screens itself: 2x2 recipes in your inventory; 3x3 recipes at a crafting table
+  within 6 blocks, or it places yours (or makes one from 4 planks) and picks it back up. Just call mc_craft.
+- Smelting: mc_smelt item=<what> count=<n> does it all (furnace nearby or carried, fuel, waiting, output).
+- mc_place item=<id> without coordinates picks a free spot about 2 blocks away and returns it.
+- mc_drop item=<id> count=<n> onto=<pos> drops items onto a block from on top (how a millstone takes input).
+- mc_interact item=<id> puts that item in your hand first (axe to strip a log, alloy on a stripped log);
+  item=empty gives an empty hand (e.g. to take a millstone's output).
+- Open screens (inventory, chests, tables) close by themselves when you act in the world (mine, walk, look,
+  place, interact); you never need to close them first.
 - If a tool result says "interrupted" because of human input, just check the state and carry on.
 - Never use chat or slash commands.
 
@@ -169,7 +182,8 @@ function stopKeyIn(text, stopKeys) {
 // ---- state checks (done by code, not by the model) ---------------------------------------------------------------
 
 async function observe(client, a) {
-  const r = await client.callTool({ name: "mc_observe", arguments: a.instance ? { instance: a.instance } : {} });
+  // full: the default is a compact summary for models; checks and digests need the raw snapshot (inventory list, player.pos).
+  const r = await client.callTool({ name: "mc_observe", arguments: { full: true, ...(a.instance ? { instance: a.instance } : {}) } });
   return JSON.parse((r.content ?? []).map((p) => p.text ?? "").join(""));
 }
 
@@ -181,22 +195,119 @@ function inventoryCounts(obs) {
   return c;
 }
 
-/** Returns { ok, missing: ["id: have 2/8"] }. Check format: { inventory: { "minecraft:id": minCount } }. */
-function evaluate(check, obs) {
+/** Count of an item id in an inventory map; `*` in the id is a wildcard ("minecraft:*_log" = all logs). */
+function countOf(have, id) {
+  const key = id.includes(":") ? id : `minecraft:${id}`;
+  if (!key.includes("*")) return have[key] ?? 0;
+  const re = new RegExp("^" + key.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join(".*") + "$");
+  return Object.entries(have).reduce((n, [k, v]) => (re.test(k) ? n + v : n), 0);
+}
+
+/**
+ * Returns { ok, missing: [...] }. Check format:
+ *   { inventory: { "minecraft:id": minCount } }   absolute: hold at least this many now
+ *   { gain: { "minecraft:id": minIncrease } }      relative: this many MORE than when the step started (`base`), so a
+ *                                                   plan can be replayed on a persistent world for data collection
+ * Ids may contain `*` wildcards. Both kinds can be combined.
+ */
+function evaluate(check, obs, base = {}) {
   if (!check) return { ok: true, missing: [] };
   const have = inventoryCounts(obs);
   const missing = [];
   for (const [id, need] of Object.entries(check.inventory ?? {})) {
-    const key = id.includes(":") ? id : `minecraft:${id}`;
-    if ((have[key] ?? 0) < need) missing.push(`${key}: have ${have[key] ?? 0}, need ${need}`);
+    const n = countOf(have, id);
+    if (n < need) missing.push(`${id}: have ${n}, need ${need}`);
+  }
+  for (const [id, need] of Object.entries(check.gain ?? {})) {
+    const got = countOf(have, id) - countOf(base, id);
+    if (got < need) missing.push(`${id}: gained ${got} since the step started, need +${need}`);
   }
   return { ok: missing.length === 0, missing };
+}
+
+/** The runner's own safety check after every tool call: returns { type, detail } when the run must stop, else null. */
+const LOW_HEALTH = 6;
+const MAX_UNDERWATER_CALLS = 3;
+async function danger(client, a, st) {
+  try {
+    const o = await observe(client, a);
+    if (/DeathScreen/.test(o.screen ?? "")) return { type: "died", detail: "the character died (death screen open); respawn in the game, then rerun" };
+    const hp = o.player?.health;
+    if (typeof hp === "number" && hp < LOW_HEALTH) return { type: "low_health", detail: `health ${hp} < ${LOW_HEALTH}; stopped before the character dies` };
+    const stuck = stalled(o, st);
+    if (stuck) return stuck;
+    // Head under water for several tool calls in a row: the model is stuck in a lake (a short swim is fine).
+    const p = o.player?.pos;
+    if (p && st) {
+      const head = { x: Math.floor(p.x), y: Math.floor(p.y + 1.6), z: Math.floor(p.z) };
+      const r = await client.callTool({ name: "mc_blocks", arguments: { positions: [head], ...(a.instance ? { instance: a.instance } : {}) } });
+      const b = JSON.parse((r.content ?? []).map((x) => x.text ?? "").join("")).blocks?.[0];
+      st.wet = /water/.test(`${b?.fluid ?? ""} ${b?.id ?? ""}`) ? st.wet + 1 : 0;
+      if (st.wet >= MAX_UNDERWATER_CALLS) return { type: "underwater", detail: `head under water for ${st.wet} tool calls in a row; stopped before the character drowns` };
+    }
+  } catch { /* observation failures are not a reason to stop */ }
+  return null;
+}
+const UNSAFE_STATUS = { died: "died", low_health: "low-health", underwater: "underwater" };
+/** Held actions (cranking, holding keys) are meant to be repeated with identical results: not a loop. */
+const isHold = (name, args) => name === "mc_move" || (name === "mc_interact" && args?.ticks !== undefined);
+const NO_PROGRESS_CALLS = 15; // no inventory change and no move of more than 3 blocks for this many tool calls
+
+/** Progress watch, fed from the same snapshot as danger(): returns a no_progress event or null. */
+function stalled(o, st) {
+  const p = o.player?.pos;
+  if (!p || !st) return null;
+  const inv = JSON.stringify(Object.entries(inventoryCounts(o)).sort());
+  st.n = (st.n ?? 0) + 1;
+  const moved = st.anchor && Math.hypot(p.x - st.anchor.x, p.y - st.anchor.y, p.z - st.anchor.z) > 3;
+  if (!st.anchor || moved || inv !== st.inv) { st.anchor = { x: p.x, y: p.y, z: p.z }; st.inv = inv; st.since = st.n; }
+  if (st.n - st.since >= NO_PROGRESS_CALLS) {
+    return { type: "no_progress", detail: `no inventory change and no move of more than 3 blocks in the last ${NO_PROGRESS_CALLS} tool calls` };
+  }
+  return null;
 }
 
 function digest(obs) {
   const p = obs.player?.pos;
   const inv = Object.entries(inventoryCounts(obs)).map(([k, v]) => `${k.replace("minecraft:", "")}x${v}`).join(", ");
   return `at ${p ? `${p.x.toFixed(1)},${p.y.toFixed(1)},${p.z.toFixed(1)}` : "?"}; screen ${obs.screen ? obs.screen.split(".").pop() : "none"}; inventory: ${inv || "empty"}`;
+}
+
+/**
+ * `surface: true` check: nothing solid above the player's head for SURFACE_CLEAR blocks (tree leaves and logs are
+ * fine), i.e. open sky, not a cave or tunnel. Needs a block query, so it is async and added to evaluate()'s result.
+ */
+const SURFACE_CLEAR = 40;
+async function evaluateFull(client, a, check, obs, base) {
+  const ev = evaluate(check, obs, base);
+  if (!check?.surface) return ev;
+  const p = obs.player?.pos;
+  if (!p) return { ok: false, missing: [...ev.missing, "surface: position unknown"] };
+  const head = Math.floor(p.y + 1.6);
+  const positions = Array.from({ length: SURFACE_CLEAR }, (_, k) => ({ x: Math.floor(p.x), y: head + 1 + k, z: Math.floor(p.z) }));
+  try {
+    const r = await client.callTool({ name: "mc_blocks", arguments: { positions, ...(a.instance ? { instance: a.instance } : {}) } });
+    const roof = JSON.parse((r.content ?? []).map((x) => x.text ?? "").join("")).blocks
+      .find((b) => b.solid && !/leaves|_log$|_wood$/.test(b.id));
+    if (roof) return { ok: false, missing: [...ev.missing, `surface: not under open sky (${roof.id.replace("minecraft:", "")} above you at y=${roof.pos.y}; you are at y=${Math.floor(p.y)})`] };
+  } catch (e) { return { ok: false, missing: [...ev.missing, `surface: could not check (${e.message ?? e})`] }; }
+  return ev;
+}
+
+/** The step's check in words, with the player's counts, so "get 16" is never read as "hold 16". */
+function checkText(check, now, base) {
+  if (!check) return "";
+  const name = (id) => { const n = id.replace(/^minecraft:/, ""); return n.includes("*") ? "any " + n.replace(/\*_?/, "").replace(/_?\*/, "") : n; };
+  const parts = [];
+  for (const [id, need] of Object.entries(check.inventory ?? {})) {
+    parts.push(`hold at least ${need} ${name(id)} (you have ${countOf(now, id)} now)`);
+  }
+  for (const [id, need] of Object.entries(check.gain ?? {})) {
+    const target = countOf(base, id) + need;
+    parts.push(`end the step holding at least ${target} ${name(id)}: ${need} more than the ${countOf(base, id)} you had when the step began (you have ${countOf(now, id)} now)`);
+  }
+  if (check.surface) parts.push("be outside under open sky (no solid block anywhere above your head)");
+  return parts.length ? `Success check (done by the runner): ${parts.join("; ")}.` : "";
 }
 
 // ---- trajectory recording (format: TRAJECTORY_FORMAT.md) --------------------------------------------------------
@@ -269,7 +380,7 @@ function recordEpisode(a, e) {
 async function play(client, tools, a, say, goal, budget, state) {
   // rec keeps the FULL untrimmed conversation (copies, since trim() edits history in place) for trajectory recording.
   const rec = { messages: [], turns: [], events: [] };
-  const r = a.teacher ? await playTeacher(a, say, goal, budget, state, rec) : await playInner(client, tools, a, say, goal, budget, state, rec);
+  const r = a.teacher ? await playTeacher(client, a, say, goal, budget, state, rec) : await playInner(client, tools, a, say, goal, budget, state, rec);
   return { ...r, rec };
 }
 
@@ -287,7 +398,7 @@ const MCP_PREFIX = "mcp__mc-bridge__";
  * STUDENT's SYSTEM (what the small model will be trained to follow); the one Claude actually ran with is hashed in
  * rec.runSystem. Returns the same { status, calls, summary } as playInner.
  */
-async function playTeacher(a, say, goal, budget, state, rec) {
+async function playTeacher(client, a, say, goal, budget, state, rec) {
   const studentSystem = a.directive ? SYSTEM + "\n\nLong-term directive:\n" + a.directive : SYSTEM;
   const head = [{ role: "system", content: studentSystem }, { role: "user", content: `Goal: ${goal.trim()}` }];
   rec.messages.push(...head);
@@ -307,6 +418,7 @@ async function playTeacher(a, say, goal, budget, state, rec) {
   child.stdin.end(head[1].content);
 
   let calls = 0, summary = "", killed = null, stderr = "", lastBoundary = Date.now();
+  const wet = { wet: 0 }; // consecutive tool calls with the head under water
   const recent = [];
   const pending = new Map(); // tool_use id -> tool name
   let group = null; // assistant message being assembled: { id, content, tool_calls, turn }
@@ -370,7 +482,7 @@ async function playTeacher(a, say, goal, budget, state, rec) {
 
       const key = stopKeyIn(text, a.stopKeys);
       if (key) { state.stop = true; kill("human"); summary = `human pressed ${key}`; return; }
-      recent.push(`${name}|${text}`);
+      if (!isHold(name, callArgs)) recent.push(`${name}|${text}`);
       if (recent.length > 3) recent.shift();
       if (recent.length === 3 && recent.every((s) => s === recent[0])) {
         rec.events.push({ msg_index: evAt, type: "stuck_repeat" });
@@ -379,6 +491,13 @@ async function playTeacher(a, say, goal, budget, state, rec) {
         return;
       }
       if (calls >= budget) kill("budget");
+      danger(client, a, wet).then((d) => {
+        if (!d || killed) return;
+        rec.events.push({ msg_index: evAt, type: d.type });
+        summary = d.detail;
+        say(`!! ${d.detail}`);
+        kill(UNSAFE_STATUS[d.type] ?? "no-progress");
+      });
     }
   };
 
@@ -408,6 +527,7 @@ async function playInner(client, tools, a, say, goal, budget, state, rec) {
   const history = [];
   let calls = 0, idle = 0, summary = "";
   const recent = [];
+  const wet = { wet: 0 }; // consecutive tool calls with the head under water
   while (!state.stop && calls < budget) {
     let msg;
     const t0 = Date.now();
@@ -469,9 +589,15 @@ async function playInner(client, tools, a, say, goal, budget, state, rec) {
 
       const key = stopKeyIn(text, a.stopKeys);
       if (key) { state.stop = true; return { status: "human", calls, summary: `human pressed ${key}` }; }
+      const d = await danger(client, a, wet);
+      if (d) {
+        rec.events.push({ msg_index: evAt, type: d.type });
+        say(`!! ${d.detail}`);
+        return { status: UNSAFE_STATUS[d.type] ?? "no-progress", calls, summary: d.detail };
+      }
 
       // The same call with the same result three times in a row means the model is going in circles.
-      recent.push(`${name}|${JSON.stringify(args)}|${text}`);
+      if (!isHold(name, args)) recent.push(`${name}|${JSON.stringify(args)}|${text}`);
       if (recent.length > 3) recent.shift();
       if (recent.length === 3 && recent.every((s) => s === recent[0])) {
         rec.events.push({ msg_index: evAt, type: "stuck_repeat" });
@@ -493,32 +619,38 @@ async function runSteps(client, tools, a, say, plan, from, state, report) {
     const rec = { plan: plan.name, n: i + 1, name, attempts: [] };
     report.steps.push(rec);
 
-    if (s.check && evaluate(s.check, await observe(client, a)).ok) {
+    // Only absolute checks can already be satisfied; a `gain` step always runs.
+    const startObs = await observe(client, a);
+    if (s.check && !s.check.gain && (await evaluateFull(client, a, s.check, startObs)).ok) {
       rec.status = "skipped (already satisfied)";
       say(`== step ${i + 1}/${steps.length} ${name}: already satisfied, skipping`);
       continue;
     }
+    const base = inventoryCounts(startObs); // gain baseline: the step's start, kept across retries
 
     let feedback = "";
     for (let attempt = 0; attempt <= a.retries && !state.stop; attempt++) {
       say(`== step ${i + 1}/${steps.length} ${name}${attempt ? ` (retry ${attempt})` : ""}`);
       const beforeObs = await observe(client, a);
       const before = digest(beforeObs);
-      const goal = [ctx + s.goal, s.verify ? `Before you say DONE, confirm in the world (mc_blocks/mc_observe): ${s.verify}` : "",
+      const goal = [ctx + s.goal, checkText(s.check, inventoryCounts(beforeObs), base),
+        `State at the start of this step (already observed): ${before}`, s.verify ? `Before you say DONE, confirm in the world (mc_blocks/mc_observe): ${s.verify}` : "",
         notes.length ? `\nEarlier steps (for context):\n- ${notes.join("\n- ")}` : "", feedback].filter(Boolean).join("\n");
       const r = await play(client, tools, a, say, goal, s.maxSteps ?? 40, state);
       state.total += r.calls;
       const obs = await observe(client, a);
-      const ev = evaluate(s.check, obs);
+      const ev = await evaluateFull(client, a, s.check, obs, base);
       rec.attempts.push({ result: r.status, calls: r.calls, summary: clip(r.summary, 300), missing: ev.missing, state: digest(obs), before });
       // A step without an inventory check is accepted only when the model itself says DONE.
-      const accepted = ev.ok && (s.check || r.status === "done");
+      const unsafe = Object.values(UNSAFE_STATUS).includes(r.status);
+      const accepted = !unsafe && ev.ok && (s.check || r.status === "done");
       recordEpisode(a, { play: r, plan, step: s, stepIndex: i, attempt, goal, beforeObs, afterObs: obs, ev, accepted });
       if (r.status === "human") return "stopped by human";
+      if (unsafe) { state.stop = true; return `stopped: ${r.summary}`; }
       if (accepted) { rec.status = "passed"; notes.push(`${name}: done. ${clip(r.summary, 160)}`); break; }
       feedback = ev.ok
-        ? `\nYour previous attempt ended (${r.status}) without confirming the goal. Current state: ${digest(obs)}. Finish it and reply DONE.`
-        : `\nYour previous attempt ended (${r.status}) but the goal is NOT met: ${ev.missing.join("; ")}. Current state: ${digest(obs)}. Try again, differently if needed.`;
+        ? `\nYour previous attempt ended (${r.status}) without confirming the goal. Finish it and reply DONE.`
+        : `\nYour previous attempt ended (${r.status}) but the goal is NOT met: ${ev.missing.join("; ")}. Try again, differently if needed.`;
     }
     if (rec.status !== "passed") {
       rec.status = "failed";

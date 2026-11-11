@@ -1,0 +1,19 @@
+{
+  "name": "Training curriculum (Create, from an empty inventory)",
+  "note": "Template for ollama-agent.js --roadmap. Copy it before a run (roadmap mode edits the file): see plans/training/README.md.",
+  "queue": [
+    "plans/training/t01-wood.json",
+    "plans/training/t02-stone.json",
+    "plans/training/t03-charcoal-torches.json",
+    "plans/training/s01-platform.json",
+    "plans/training/t04-iron.json",
+    "plans/training/s02-storage.json",
+    "plans/training/t05-andesite-alloy.json",
+    "plans/training/t06-create-parts.json",
+    "plans/training/s03-stairs-down.json",
+    "plans/training/t07-millstone.json"
+  ],
+  "completed": [],
+  "blocked": [],
+  "history": []
+}

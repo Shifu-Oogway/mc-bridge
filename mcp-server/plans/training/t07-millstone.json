@@ -1,0 +1,69 @@
+{
+  "name": "Create: andesite casing, millstone, grind cobblestone into gravel",
+  "context": "Tier 7, first machine. Verified (Create 6.0.9 code + Ponder, tested live): the millstone is powered only by a cogwheel beside it or a shaft below it, never by a crank on its side. A hand crank turns what its back faces, only while right-click is held. Items go in by falling onto the millstone's top; right-click with an EMPTY hand takes the output. Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "be outside",
+      "maxSteps": 20,
+      "check": {
+        "surface": true
+      },
+      "goal": "Be outside under open sky (you need trees for wood in this plan). If you are underground, dig a staircase up: mc_dig direction=<north/south/east/west> stairs=true up=true length=32; it stops by itself on open ground. If it stops early, read why and continue in another direction."
+    },
+    {
+      "name": "have the parts",
+      "maxSteps": 80,
+      "check": {
+        "inventory": {
+          "create:cogwheel": 2,
+          "create:hand_crank": 1,
+          "create:andesite_alloy": 1,
+          "minecraft:*_axe": 1
+        }
+      },
+      "goal": "You need 2 create:cogwheel (one goes into the millstone recipe, one drives it), 1 create:hand_crank, 1 create:andesite_alloy, an axe, 1 log and, kept apart from the 2 andesite the alloy uses, 1 more andesite (or stone, diorite or granite; cobblestone does NOT work in the millstone recipe), plus a few cobblestone to grind. The hand crank recipe uses 1 alloy: craft the crank first, then make sure you still hold 1 alloy for the casing. Make whatever is missing (cogwheel = shaft + plank, hand crank = 3 planks + 1 alloy, alloy = 2 andesite + 2 iron nuggets, stone axe = 3 cobblestone + 2 sticks)."
+    },
+    {
+      "name": "make an andesite casing",
+      "maxSteps": 40,
+      "check": {
+        "gain": {
+          "create:andesite_casing": 1
+        }
+      },
+      "goal": "Make 1 create:andesite_casing: place a log nearby (mc_place item=<your log> with no coordinates picks a spot and returns its position), mc_look at the log and mc_interact use item=<your axe, e.g. stone_axe> to strip it. Then mc_interact use item=create:andesite_alloy on the stripped log: it becomes an andesite casing. Mine it (mc_mine pos) to pick it up."
+    },
+    {
+      "name": "craft a millstone",
+      "maxSteps": 25,
+      "check": {
+        "gain": {
+          "create:millstone": 1
+        }
+      },
+      "goal": "At a crafting table craft create:millstone (verified recipe: cogwheel on top, andesite casing in the middle, and a block from the c:stones tag below: andesite, stone, diorite or granite, NOT cobblestone; mc_craft create:millstone). mc_craft handles the crafting table by itself (uses one within 6 blocks, or places yours or makes one from 4 planks, and picks it back up). If you have no andesite/stone/diorite/granite, mine one (mc_mine block=andesite count=1 radius=32) or smelt 1 cobblestone into stone with mc_smelt; if mc_smelt placed a furnace, mine it back afterwards."
+    },
+    {
+      "name": "build the millstone drive",
+      "maxSteps": 40,
+      "goal": "On open ground: (1) mc_place item=create:millstone with no coordinates; it picks a spot and returns the position, call it M. (2) Place a create:cogwheel directly beside the millstone at the same height (mc_place with the coordinates of one block north, south, east or west of M, on the ground), so it meshes with the millstone; placed on the ground its axis is vertical (axis=y). If that cell is not free or has no ground, try another side. (3) Place the create:hand_crank on TOP of that cogwheel so its back faces down into the cog: mc_place at the cell above the cogwheel. Check all three with mc_blocks.",
+      "verify": "mc_blocks shows create:millstone at M, create:cogwheel with axis=y right beside it at the same y, and create:hand_crank with facing=up directly above the cogwheel."
+    },
+    {
+      "name": "feed cobblestone",
+      "maxSteps": 30,
+      "goal": "Put 4 cobblestone into the millstone with mc_drop item=cobblestone count=4 onto=M. It stands on the millstone, drops them straight down (that is how a millstone takes items; thrown from beside, most land short) and steps back. looseOnTop=0 means all went in.",
+      "verify": "mc_drop reported looseOnTop 0 and mc_observe shows 4 fewer cobblestone than at the start of this step."
+    },
+    {
+      "name": "crank and collect gravel",
+      "maxSteps": 30,
+      "check": {
+        "gain": {
+          "minecraft:gravel": 1
+        }
+      },
+      "goal": "Grinding takes about 6.3 seconds of cranking per cobblestone, one at a time (Create wiki formula: ceil(250 / (32 RPM / 16)) + 1 = 126 ticks; matches a live test). For 4 cobblestone: mc_look at the hand crank and hold right-click with mc_interact use ticks=100 six times in a row (30 s; it only turns while held). Then collect ONCE with an empty hand: mc_look at the millstone and mc_interact use item=empty. Do not collect early: with no output ready, an empty-hand click gives you the input back."
+    }
+  ]
+}

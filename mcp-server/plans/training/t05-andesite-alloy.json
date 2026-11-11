@@ -1,0 +1,46 @@
+{
+  "name": "Create: andesite alloy",
+  "context": "Tier 5, first Create material. Andesite alloy = 2 andesite + 2 iron nuggets (crafting table). Needs iron ingots (tier 4). Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "have an iron ingot",
+      "maxSteps": 80,
+      "check": {
+        "inventory": {
+          "minecraft:iron_ingot": 1
+        }
+      },
+      "goal": "You need at least 1 iron_ingot. If you have raw_iron, smelt it with mc_smelt item=raw_iron count=1 (needs a furnace nearby or in your inventory, and fuel). Otherwise mine raw iron first (mc_find_blocks block=#minecraft:iron_ores radius=32) with a stone pickaxe."
+    },
+    {
+      "name": "get 4 andesite",
+      "maxSteps": 60,
+      "check": {
+        "gain": {
+          "minecraft:andesite": 4
+        }
+      },
+      "goal": "Get 4 andesite. Either mine it (mc_find_blocks block=andesite radius=24; it is common in stone, hold a pickaxe; mc_mine block=andesite count=4 radius=32) or craft it: 1 diorite + 1 cobblestone gives 2 andesite (mc_craft andesite)."
+    },
+    {
+      "name": "craft 9 iron nuggets",
+      "maxSteps": 10,
+      "check": {
+        "gain": {
+          "minecraft:iron_nugget": 9
+        }
+      },
+      "goal": "Craft 1 iron_ingot into 9 iron_nugget: mc_craft iron_nugget."
+    },
+    {
+      "name": "craft 2 andesite alloy",
+      "maxSteps": 30,
+      "check": {
+        "gain": {
+          "create:andesite_alloy": 2
+        }
+      },
+      "goal": "Craft 2 create:andesite_alloy at a crafting table (each: 2 andesite + 2 iron nuggets; mc_craft handles the layout). mc_craft handles the crafting table by itself (uses one within 6 blocks, or places yours or makes one from 4 planks, and picks it back up). Then mc_craft create:andesite_alloy times=2."
+    }
+  ]
+}

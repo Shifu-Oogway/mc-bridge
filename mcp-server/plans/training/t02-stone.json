@@ -1,0 +1,55 @@
+{
+  "name": "Stone age: cobblestone, stone tools, furnace",
+  "context": "Tier 2. Needs a pickaxe; the first step makes one if you have none. Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "have a pickaxe",
+      "maxSteps": 50,
+      "check": {
+        "inventory": {
+          "minecraft:*_pickaxe": 1
+        }
+      },
+      "goal": "You need any pickaxe. If you have none: get 3 logs (mc_mine block=#minecraft:logs count=3 radius=32), craft planks and sticks in the inventory, a crafting table, place it and craft a wooden_pickaxe at it."
+    },
+    {
+      "name": "mine 16 cobblestone",
+      "maxSteps": 60,
+      "check": {
+        "gain": {
+          "minecraft:cobblestone": 16
+        }
+      },
+      "goal": "Get 16 cobblestone by mining stone with your pickaxe (stone drops cobblestone). Never go into lakes or rivers for stone. First run mc_find_blocks block=water radius=8. RULE: if it finds ANY water, do not mine exposed stone here; walk at least 15 blocks away from the water onto dry land (mc_goto) and check again. When no water is within 8 blocks: if exposed stone is close by (mc_find_blocks block=stone exposedOnly=true radius=8), mc_mine block=stone count=16 radius=8; otherwise dig a staircase down where you stand: mc_dig direction=<north/south/east/west> stairs=true length=12 (under 3 to 5 blocks of dirt there is stone, and what you dig is collected). If a tool says you are in water, swim up and get to land before anything else."
+    },
+    {
+      "name": "craft stone pickaxe and stone axe",
+      "maxSteps": 40,
+      "check": {
+        "gain": {
+          "minecraft:stone_pickaxe": 1,
+          "minecraft:stone_axe": 1
+        }
+      },
+      "goal": "Craft a stone_pickaxe and a stone_axe (3 cobblestone + 2 sticks each; make sticks from planks if you have fewer than 4). mc_craft handles the crafting table by itself (uses one within 6 blocks, or places yours or makes one from 4 planks, and picks it back up). If you have no table and no planks, chop a log first."
+    },
+    {
+      "name": "craft a furnace",
+      "maxSteps": 25,
+      "check": {
+        "gain": {
+          "minecraft:furnace": 1
+        }
+      },
+      "goal": "Craft a furnace (8 cobblestone in a ring) at a crafting table with mc_craft furnace. mc_craft handles the crafting table by itself (uses one within 6 blocks, or places yours or makes one from 4 planks, and picks it back up). Keep the furnace in your inventory."
+    },
+    {
+      "name": "back to the surface",
+      "maxSteps": 20,
+      "check": {
+        "surface": true
+      },
+      "goal": "Get back outside under open sky. If you are underground (in a cave, tunnel or hole), dig a staircase up: mc_dig direction=<north/south/east/west> stairs=true up=true length=32. It stops by itself on open ground; if it stops early, read why and continue in another direction. If you are already outside, just reply DONE."
+    }
+  ]
+}

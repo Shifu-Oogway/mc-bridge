@@ -1,0 +1,18 @@
+{
+  "name": "Drill: dig a staircase down and come back up",
+  "context": "Movement practice underground. Needs a pickaxe; torches help. Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "dig a staircase 8 blocks down",
+      "maxSteps": 70,
+      "goal": "From where you stand on dry land, dig a staircase going down 8 blocks: mc_dig direction=<north/south/east/west> stairs=true length=8. If it stops early (water, lava, no floor), read why and continue in another direction from where you are. Place a torch on the stairs every 4 steps if you have torches.",
+      "verify": "mc_observe shows your feet at least 7 blocks lower than where this step started, standing in your own staircase."
+    },
+    {
+      "name": "return to the surface",
+      "maxSteps": 30,
+      "goal": "Walk back up your staircase to where you started (mc_goto to the top step, give its y; the staircase was dug in one straight line). Then mc_observe to confirm you are back on the surface.",
+      "verify": "your y is back within 1 block of where the staircase started (compare with the start of the previous step)."
+    }
+  ]
+}

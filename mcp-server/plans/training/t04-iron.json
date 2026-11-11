@@ -1,0 +1,44 @@
+{
+  "name": "Iron: find iron ore, mine raw iron, smelt ingots",
+  "context": "Tier 4. Needs a stone (or better) pickaxe and a furnace; fuel can be coal, charcoal or planks. Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "have a stone pickaxe",
+      "maxSteps": 40,
+      "check": {
+        "inventory": {
+          "minecraft:stone_pickaxe": 1
+        }
+      },
+      "goal": "You need a stone_pickaxe to mine iron. If you have none, mine 3 cobblestone with any pickaxe, then craft a stone_pickaxe at a crafting table."
+    },
+    {
+      "name": "mine 4 raw iron",
+      "maxSteps": 90,
+      "check": {
+        "gain": {
+          "minecraft:raw_iron": 4
+        }
+      },
+      "goal": "Get 4 raw_iron. Search: mc_find_blocks block=#minecraft:iron_ores radius=32 (exposed ore in caves, ravines and hillsides is easiest; it is common between y=0 and y=64). If any is exposed, mc_mine block=#minecraft:iron_ores count=4 radius=32 mines it directly. Otherwise dig to it: a staircase down (mc_dig direction=... stairs=true) to its level, then a tunnel (mc_dig direction=...) toward it, then mc_mine pos for each ore block. Never go through water or lakes. If nothing is found, move about 40 blocks on land and search again, or dig a staircase down to around y=40 and search there. Place torches in dark tunnels if you have them."
+    },
+    {
+      "name": "smelt 4 iron ingots",
+      "maxSteps": 60,
+      "check": {
+        "gain": {
+          "minecraft:iron_ingot": 4
+        }
+      },
+      "goal": "Call mc_smelt first: it finds a furnace within 6 blocks by itself (one may already stand nearby). Only if it says there is none and you carry none, craft one (8 cobblestone at a crafting table). Smelt the raw iron into at least 4 iron_ingot with mc_smelt item=raw_iron count=4 (it uses a furnace within 6 blocks or places the one you carry, adds fuel such as coal, charcoal or planks, waits and collects). If the result says some are still smelting, call mc_smelt item=raw_iron count=0 to collect them. Afterwards mine the furnace back (mc_mine pos; its position is in the result) so you carry it to the next job."
+    },
+    {
+      "name": "back to the surface",
+      "maxSteps": 20,
+      "check": {
+        "surface": true
+      },
+      "goal": "Get back outside under open sky. If you are underground (in a cave, tunnel or hole), dig a staircase up: mc_dig direction=<north/south/east/west> stairs=true up=true length=32. It stops by itself on open ground; if it stops early, read why and continue in another direction. If you are already outside, just reply DONE."
+    }
+  ]
+}

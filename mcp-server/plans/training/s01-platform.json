@@ -1,0 +1,22 @@
+{
+  "name": "Drill: build a 3x3 cobblestone platform with a corner torch",
+  "context": "Building practice. Needs 10 cobblestone (and a torch if you have one). Survival world, wherever the player is now; never assume coordinates, find things with mc_find_blocks. Never dig the block under your own feet or straight down; dig staircases or side tunnels. Avoid lava and deep water (mc_mine allowFluids only for sand/gravel at shores). Do not break blocks of player-built structures.",
+  "steps": [
+    {
+      "name": "have 10 cobblestone",
+      "maxSteps": 50,
+      "check": {
+        "inventory": {
+          "minecraft:cobblestone": 10
+        }
+      },
+      "goal": "You need 10 cobblestone. If you have fewer, mine stone with a pickaxe (mc_mine block=stone count=10 radius=32 mines the nearest exposed stone)."
+    },
+    {
+      "name": "build the platform",
+      "maxSteps": 50,
+      "goal": "Pick flat open ground about 3 blocks from you (mc_terrain helps). Replace or cover a 3x3 area at floor level with cobblestone using mc_place for each of the 9 positions (stand outside the square; never place where you stand). If you have a torch, put it on one corner block (mc_place item=torch on top of it).",
+      "verify": "all 9 floor positions of the 3x3 square are cobblestone (mc_blocks on the 9 positions)."
+    }
+  ]
+}

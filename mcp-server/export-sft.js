@@ -47,7 +47,7 @@ function parseArgs(argv) {
   return a;
 }
 
-const BAD_EVENTS = new Set(["human_input", "ollama_error", "teacher_error", "stuck_repeat"]);
+const BAD_EVENTS = new Set(["human_input", "ollama_error", "teacher_error", "stuck_repeat", "died", "low_health", "underwater"]);
 
 function listFiles(inputs) {
   const files = [];
