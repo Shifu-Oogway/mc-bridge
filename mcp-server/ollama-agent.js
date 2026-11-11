@@ -17,10 +17,20 @@
 //
 // The human stops it by pressing one of --stop-keys (default W,A,S,D,Space,Esc) during an action, or Ctrl+C.
 // Mouse input and other keys only cut the current action short; the agent then carries on.
+//
+// Recording: --record [path] [--actor teacher|student] appends one JSONL line per step attempt (the messages the model
+// saw, outcome, inventory delta) for later SFT export. Format: TRAJECTORY_FORMAT.md. Default path:
+// run-logs/trajectories/<stamp>.jsonl.
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { spawn } from "node:child_process";
+import crypto from "node:crypto";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import { createInterface } from "node:readline";
+import { compactTools } from "./tools-compact.js";
+import { CHUNK, trim } from "./trim.js";
 import { fileURLToPath } from "node:url";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -42,6 +52,12 @@ function parseArgs(argv) {
     retries: 1,
     maxPlans: 20, // plans run per launch in --roadmap mode
     maxAuto: 5, // plans the model may write itself per launch
+    record: null, // trajectory JSONL path (see TRAJECTORY_FORMAT.md); off unless --record is given
+    actor: "student",
+    episodes: 0,
+    teacher: false, // Claude Code plays instead of Ollama (see playTeacher)
+    teacherModel: "sonnet",
+    fullTools: false, // --full-tools: give the student the full MCP tool descriptions instead of the compact list
   };
   for (let i = 2; i < argv.length; i++) {
     const k = argv[i], v = () => argv[++i];
@@ -61,10 +77,16 @@ function parseArgs(argv) {
     else if (k === "--log") a.log = v();
     else if (k === "--report") a.report = v();
     else if (k === "--instance") a.instance = v();
+    else if (k === "--record") a.record = argv[i + 1] && !argv[i + 1].startsWith("--") ? path.resolve(argv[++i]) : path.join(HERE, "..", "run-logs", "trajectories", `${STAMP}.jsonl`);
+    else if (k === "--teacher") { a.teacher = true; a.actor = "teacher"; }
+    else if (k === "--teacher-model") a.teacherModel = v();
+    else if (k === "--full-tools") a.fullTools = true;
+    else if (k === "--actor") { a.actor = v(); if (!["teacher", "student"].includes(a.actor)) throw new Error("--actor must be teacher or student"); }
     else if (k === "--allow-chat") a.exclude = a.exclude.filter((t) => t !== "mc_chat");
     else if (k === "--stop-keys") a.stopKeys = v().split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
     else throw new Error(`unknown argument ${k}`);
   }
+  if (a.teacher && !a.record) a.record = path.join(HERE, "..", "run-logs", "trajectories", `${STAMP}.jsonl`); // recording is the point of teacher mode
   if (!a.goal && !a.plan && !a.roadmapPath) throw new Error('give --goal "...", --goal-file path, --plan path or --roadmap path');
   return a;
 }
@@ -108,25 +130,6 @@ function clip(s, n) {
   return s.length <= n ? s : s.slice(0, n) + `\n...[${s.length - n} more characters cut]`;
 }
 
-/**
- * Keeps the prompt prefix STABLE so Ollama can reuse its cache on a CPU: history grows untouched until it exceeds
- * keep + CHUNK messages, then it is cut back to `keep` in one go (whole turns only, so tool results always follow
- * their assistant call) and all but the 4 newest tool results are shortened. That is one cache reset per ~6 turns
- * instead of one every turn.
- */
-const CHUNK = 12;
-function trim(history, keep) {
-  if (history.length <= keep + CHUNK) return history;
-  let start = history.length - keep;
-  while (start < history.length && history[start].role === "tool") start++;
-  history.splice(0, start);
-  const tools = history.map((m, i) => (m.role === "tool" ? i : -1)).filter((i) => i >= 0);
-  for (const i of tools.slice(0, -4)) {
-    if (history[i].content.length > 240) history[i].content = history[i].content.slice(0, 200) + " ...[old result shortened]";
-  }
-  return history;
-}
-
 async function chat(a, messages, tools) {
   const res = await fetch(`${a.ollama}/api/chat`, {
     method: "POST",
@@ -144,6 +147,7 @@ async function chat(a, messages, tools) {
     if (j.error) throw new Error(`ollama: ${j.error}`);
     out.content += j.message?.content ?? "";
     if (j.message?.tool_calls) out.tool_calls.push(...j.message.tool_calls);
+    if (j.done) out.stats = { prompt_tokens: j.prompt_eval_count, gen_tokens: j.eval_count };
   };
   for await (const chunk of res.body) {
     buf += dec.decode(chunk, { stream: true });
@@ -195,33 +199,240 @@ function digest(obs) {
   return `at ${p ? `${p.x.toFixed(1)},${p.y.toFixed(1)},${p.z.toFixed(1)}` : "?"}; screen ${obs.screen ? obs.screen.split(".").pop() : "none"}; inventory: ${inv || "empty"}`;
 }
 
+// ---- trajectory recording (format: TRAJECTORY_FORMAT.md) --------------------------------------------------------
+
+const sha = (s) => "sha256:" + crypto.createHash("sha256").update(s).digest("hex").slice(0, 16);
+
+function inventoryDelta(before, after) {
+  const d = {};
+  for (const k of new Set([...Object.keys(before), ...Object.keys(after)])) {
+    const diff = (after[k] ?? 0) - (before[k] ?? 0);
+    if (diff) d[k] = diff;
+  }
+  return d;
+}
+
+/** Appends one episode line. Never throws: recording must not be able to break a run. */
+function recordEpisode(a, e) {
+  if (!a.record) return;
+  try {
+    const { play: r, plan, step, stepIndex, attempt, goal, beforeObs, afterObs, ev, accepted } = e;
+    const beforeInv = inventoryCounts(beforeObs), afterInv = inventoryCounts(afterObs);
+    const line = {
+      v: 1,
+      episode_id: `${STAMP}-${String(++a.episodes).padStart(4, "0")}`,
+      meta: {
+        session: STAMP,
+        actor: { role: a.actor, model: a.teacher ? `claude:${a.teacherModel}` : a.model, via: a.teacher ? "claude-code" : "ollama" },
+        tools_hash: a.toolsHash,
+        tools_mode: a.fullTools ? "full" : "compact",
+        system_hash: sha(r.rec.messages[0]?.content ?? ""), // the student's prompt, which is what gets trained on
+        ...(r.rec.runSystem ? { run_system_hash: sha(r.rec.runSystem) } : {}), // teacher mode: the prompt Claude actually ran with
+        trim: { keep: a.keep, chunk: CHUNK, resultChars: a.resultChars, shortenOlderThan: 240, keepFullNewest: 4 },
+        ctx: a.ctx,
+      },
+      task: {
+        plan: plan.name ?? "goal",
+        step_id: `${plan.name ?? "goal"}#${stepIndex + 1}`,
+        step_name: step.name ?? `step ${stepIndex + 1}`,
+        attempt,
+        goal_text: goal,
+        check: step.check ?? null,
+        verify: step.verify ?? null,
+        maxSteps: step.maxSteps ?? null,
+      },
+      before: { digest: digest(beforeObs), inventory: beforeInv },
+      messages: r.rec.messages,
+      turns: r.rec.turns,
+      events: r.rec.events,
+      outcome: {
+        status: r.status,
+        accepted: Boolean(accepted),
+        check_ok: ev.ok,
+        missing: ev.missing,
+        calls: r.calls,
+        summary: clip(r.summary ?? "", 300),
+        after: { digest: digest(afterObs), inventory: afterInv },
+        inventory_delta: inventoryDelta(beforeInv, afterInv),
+      },
+    };
+    fs.mkdirSync(path.dirname(a.record), { recursive: true });
+    fs.appendFileSync(a.record, JSON.stringify(line) + "\n");
+  } catch (err) {
+    console.error(`trajectory recording failed: ${err.message ?? err}`);
+  }
+}
+
 // ---- the playing loop --------------------------------------------------------------------------------------------
 
 /** Plays one goal until DONE, the step budget, a stuck loop, or a human stop key. Returns { status, calls, summary }. */
 async function play(client, tools, a, say, goal, budget, state) {
+  // rec keeps the FULL untrimmed conversation (copies, since trim() edits history in place) for trajectory recording.
+  const rec = { messages: [], turns: [], events: [] };
+  const r = a.teacher ? await playTeacher(a, say, goal, budget, state, rec) : await playInner(client, tools, a, say, goal, budget, state, rec);
+  return { ...r, rec };
+}
+
+// ---- teacher mode: Claude Code plays instead of Ollama -----------------------------------------------------------
+
+const TEACHER_ADDENDUM = `
+
+Before every tool call, write ONE short sentence (under 20 words) saying what you are about to do and why. Never write
+long explanations. Your tool calls and short sentences are being recorded to train a small model.`;
+const MCP_PREFIX = "mcp__mc-bridge__";
+
+/**
+ * Plays one goal by running `claude -p` (Claude Code, using its own login: no API key) with only the mc-bridge tools,
+ * and converts its stream-json output into the same message shape the student sees. The recorded system prompt is the
+ * STUDENT's SYSTEM (what the small model will be trained to follow); the one Claude actually ran with is hashed in
+ * rec.runSystem. Returns the same { status, calls, summary } as playInner.
+ */
+async function playTeacher(a, say, goal, budget, state, rec) {
+  const studentSystem = a.directive ? SYSTEM + "\n\nLong-term directive:\n" + a.directive : SYSTEM;
+  const head = [{ role: "system", content: studentSystem }, { role: "user", content: `Goal: ${goal.trim()}` }];
+  rec.messages.push(...head);
+  const teacherSystem = studentSystem.replace(/\n*\/no_think\s*$/, "") + TEACHER_ADDENDUM +
+    (a.instance ? `\n\nWhen a tool takes an "instance" argument, always pass "${a.instance}".` : "");
+  rec.runSystem = teacherSystem;
+
+  const mcpConfig = JSON.stringify({ mcpServers: { "mc-bridge": { command: process.execPath, args: [path.join(HERE, "index.js")] } } });
+  const args = ["-p", "--model", a.teacherModel, "--output-format", "stream-json", "--verbose",
+    "--system-prompt", teacherSystem, "--mcp-config", mcpConfig, "--strict-mcp-config", "--tools", "",
+    "--allowedTools", "mcp__mc-bridge", "--setting-sources", "", "--disable-slash-commands",
+    "--permission-mode", "dontAsk", "--no-session-persistence"];
+  if (a.exclude.length) args.push("--disallowedTools", ...a.exclude.map((n) => MCP_PREFIX + n));
+  const env = { ...process.env };
+  delete env.ANTHROPIC_API_KEY; // use Claude Code's own login, not an API key
+  const child = spawn("claude", args, { cwd: a.teacherCwd, env, stdio: ["pipe", "pipe", "pipe"] });
+  child.stdin.end(head[1].content);
+
+  let calls = 0, summary = "", killed = null, stderr = "", lastBoundary = Date.now();
+  const recent = [];
+  const pending = new Map(); // tool_use id -> tool name
+  let group = null; // assistant message being assembled: { id, content, tool_calls, turn }
+  child.stderr.on("data", (d) => { stderr = (stderr + d).slice(-2000); });
+  const kill = (why) => { if (!killed) { killed = why; child.kill("SIGTERM"); } };
+  const watch = setInterval(() => { if (state.stop) kill("aborted"); }, 250);
+  const spawnFailed = new Promise((res) => child.once("error", (e) => { stderr += String(e.message ?? e); res(true); }));
+
+  const flush = () => {
+    if (!group) return;
+    const { content, tool_calls, turn } = group;
+    group = null;
+    turn.msg_index = rec.messages.length;
+    rec.turns.push(turn);
+    rec.messages.push({ role: "assistant", content, tool_calls: tool_calls.length ? tool_calls : undefined });
+    if (content.trim()) { summary = content.trim(); say(`model: ${summary}`); }
+  };
+
+  const onAssistant = (ev) => {
+    const m = ev.message;
+    if (!group || group.id !== m.id) {
+      flush();
+      group = { id: m.id, content: "", tool_calls: [], turn: { msg_index: -1, latency_ms: Date.now() - lastBoundary, tool_errors: [] } };
+    }
+    for (const b of m.content ?? []) {
+      if (b.type === "text") group.content += (group.content ? "\n" : "") + b.text;
+      else if (b.type === "tool_use") {
+        const name = b.name.replace(MCP_PREFIX, "");
+        const input = structuredClone(b.input ?? {});
+        if (a.instance && input.instance === a.instance) delete input.instance; // the student never passes it
+        group.tool_calls.push({ function: { name, arguments: input } });
+        pending.set(b.id, { name, args: input });
+      }
+    }
+    if (m.usage) {
+      group.turn.gen_tokens = m.usage.output_tokens;
+      group.turn.prompt_tokens = (m.usage.input_tokens ?? 0) + (m.usage.cache_creation_input_tokens ?? 0) + (m.usage.cache_read_input_tokens ?? 0);
+    }
+  };
+
+  const onUser = (ev) => {
+    for (const b of ev.message?.content ?? []) {
+      if (b.type !== "tool_result") continue;
+      flush();
+      const { name, args: callArgs } = pending.get(b.tool_use_id) ?? { name: "unknown", args: {} };
+      pending.delete(b.tool_use_id);
+      const raw = typeof b.content === "string" ? b.content : (b.content ?? []).map((p) => p.text ?? "").join("\n");
+      let text = compact(raw);
+      if (b.is_error) text = `error: ${text}`;
+      const shown = clip(text, a.resultChars);
+      const evAt = rec.messages.length;
+      rec.messages.push({ role: "tool", tool_name: name, content: shown });
+      const last = rec.turns[rec.turns.length - 1];
+      const isErr = text.startsWith("error:");
+      last?.tool_errors.push(isErr);
+      if (isErr) rec.events.push({ msg_index: evAt, type: "tool_error" });
+      if (/human key press|interrupted/i.test(text)) rec.events.push({ msg_index: evAt, type: "human_input" });
+      calls++;
+      lastBoundary = Date.now();
+      say(`[${state.total + calls}] ${name} ${JSON.stringify(callArgs)}\n    -> ${clip(text, 300)}`);
+
+      const key = stopKeyIn(text, a.stopKeys);
+      if (key) { state.stop = true; kill("human"); summary = `human pressed ${key}`; return; }
+      recent.push(`${name}|${text}`);
+      if (recent.length > 3) recent.shift();
+      if (recent.length === 3 && recent.every((s) => s === recent[0])) {
+        rec.events.push({ msg_index: evAt, type: "stuck_repeat" });
+        summary = `repeated ${name} with no change`;
+        kill("stuck");
+        return;
+      }
+      if (calls >= budget) kill("budget");
+    }
+  };
+
+  const rl = createInterface({ input: child.stdout });
+  rl.on("line", (line) => {
+    if (killed || !line.trim()) return;
+    let ev;
+    try { ev = JSON.parse(line); } catch { return; }
+    if (ev.type === "assistant") onAssistant(ev);
+    else if (ev.type === "user") onUser(ev);
+  });
+  const exit = await Promise.race([new Promise((res) => child.once("close", (code) => res(code))), spawnFailed.then(() => "spawn-error")]);
+  clearInterval(watch);
+  flush();
+
+  if (killed) return { status: killed === "human" ? "human" : killed === "aborted" ? "aborted" : killed, calls, summary };
+  if (exit !== 0) {
+    rec.events.push({ msg_index: rec.messages.length, type: "teacher_error" });
+    return { status: "teacher-error", calls, summary: `claude exited ${exit}: ${stderr.trim().slice(-300)}` };
+  }
+  return { status: /\bDONE\b/.test(summary) ? "done" : "stalled", calls, summary };
+}
+
+async function playInner(client, tools, a, say, goal, budget, state, rec) {
   const head = [{ role: "system", content: a.directive ? SYSTEM + "\n\nLong-term directive:\n" + a.directive : SYSTEM }, { role: "user", content: `Goal: ${goal.trim()}` }];
+  rec.messages.push(...head);
   const history = [];
   let calls = 0, idle = 0, summary = "";
   const recent = [];
   while (!state.stop && calls < budget) {
     let msg;
+    const t0 = Date.now();
     for (let t = 0; ; t++) {
       try { msg = await chat(a, [...head, ...trim(history, a.keep)], tools); break; }
       catch (e) {
         say(`ollama error (${t + 1}/3): ${e.cause?.message ?? e.message ?? e}`);
-        if (t >= 2) return { status: "ollama-error", calls, summary: String(e.message ?? e) };
+        if (t >= 2) { rec.events.push({ msg_index: rec.messages.length, type: "ollama_error" }); return { status: "ollama-error", calls, summary: String(e.message ?? e) }; }
         await new Promise((r) => setTimeout(r, 5000));
       }
     }
     const tc = msg.tool_calls ?? [];
     history.push({ role: "assistant", content: msg.content ?? "", tool_calls: tc.length ? tc : undefined });
+    const turn = { msg_index: rec.messages.length, latency_ms: Date.now() - t0, prompt_tokens: msg.stats?.prompt_tokens, gen_tokens: msg.stats?.gen_tokens, tool_errors: [] };
+    rec.turns.push(turn);
+    rec.messages.push({ role: "assistant", content: msg.content ?? "", tool_calls: tc.length ? structuredClone(tc) : undefined });
     if (msg.content) msg.content = msg.content.replace(/<think>[\s\S]*?<\/think>/g, "").replace(/^[\s\S]*<\/think>/, "");
     if (msg.content?.trim()) { summary = msg.content.trim(); say(`model: ${summary}`); }
 
     if (tc.length === 0) {
       if (/\bDONE\b/.test(msg.content ?? "")) return { status: "done", calls, summary };
       if (++idle >= 3) return { status: "stalled", calls, summary: summary || "model stopped calling tools" };
-      history.push({ role: "user", content: "Continue toward the goal: call a tool, or reply DONE with a summary if it is achieved." });
+      const nudge = { role: "user", content: "Continue toward the goal: call a tool, or reply DONE with a summary if it is achieved." };
+      history.push(nudge);
+      rec.messages.push({ ...nudge });
       continue;
     }
     idle = 0;
@@ -232,9 +443,10 @@ async function play(client, tools, a, say, goal, budget, state) {
       if (typeof args === "string") { try { args = JSON.parse(args); } catch { args = {}; } }
       if (a.instance && args.instance === undefined) args.instance = a.instance;
       calls++;
-      let text;
+      let text, invalid = false;
       if (!tools.some((t) => t.function.name === name)) {
         text = `error: no tool named ${name}`;
+        invalid = true;
       } else {
         try {
           const r = await client.callTool({ name, arguments: args });
@@ -245,7 +457,15 @@ async function play(client, tools, a, say, goal, budget, state) {
         }
       }
       say(`[${state.total + calls}] ${name} ${JSON.stringify(args)}\n    -> ${clip(text, 300)}`);
-      history.push({ role: "tool", tool_name: name, content: clip(text, a.resultChars) });
+      const shown = clip(text, a.resultChars);
+      history.push({ role: "tool", tool_name: name, content: shown });
+      const isErr = text.startsWith("error:");
+      turn.tool_errors.push(isErr);
+      const evAt = rec.messages.length; // index of the tool message about to be recorded
+      rec.messages.push({ role: "tool", tool_name: name, content: shown });
+      if (invalid) rec.events.push({ msg_index: evAt, type: "invalid_tool" });
+      else if (isErr) rec.events.push({ msg_index: evAt, type: "tool_error" });
+      if (/human key press|interrupted/i.test(text)) rec.events.push({ msg_index: evAt, type: "human_input" });
 
       const key = stopKeyIn(text, a.stopKeys);
       if (key) { state.stop = true; return { status: "human", calls, summary: `human pressed ${key}` }; }
@@ -254,6 +474,7 @@ async function play(client, tools, a, say, goal, budget, state) {
       recent.push(`${name}|${JSON.stringify(args)}|${text}`);
       if (recent.length > 3) recent.shift();
       if (recent.length === 3 && recent.every((s) => s === recent[0])) {
+        rec.events.push({ msg_index: evAt, type: "stuck_repeat" });
         return { status: "stuck", calls, summary: `repeated ${name} ${JSON.stringify(args)} with no change` };
       }
     }
@@ -281,7 +502,8 @@ async function runSteps(client, tools, a, say, plan, from, state, report) {
     let feedback = "";
     for (let attempt = 0; attempt <= a.retries && !state.stop; attempt++) {
       say(`== step ${i + 1}/${steps.length} ${name}${attempt ? ` (retry ${attempt})` : ""}`);
-      const before = digest(await observe(client, a));
+      const beforeObs = await observe(client, a);
+      const before = digest(beforeObs);
       const goal = [ctx + s.goal, s.verify ? `Before you say DONE, confirm in the world (mc_blocks/mc_observe): ${s.verify}` : "",
         notes.length ? `\nEarlier steps (for context):\n- ${notes.join("\n- ")}` : "", feedback].filter(Boolean).join("\n");
       const r = await play(client, tools, a, say, goal, s.maxSteps ?? 40, state);
@@ -289,9 +511,10 @@ async function runSteps(client, tools, a, say, plan, from, state, report) {
       const obs = await observe(client, a);
       const ev = evaluate(s.check, obs);
       rec.attempts.push({ result: r.status, calls: r.calls, summary: clip(r.summary, 300), missing: ev.missing, state: digest(obs), before });
-      if (r.status === "human") return "stopped by human";
       // A step without an inventory check is accepted only when the model itself says DONE.
       const accepted = ev.ok && (s.check || r.status === "done");
+      recordEpisode(a, { play: r, plan, step: s, stepIndex: i, attempt, goal, beforeObs, afterObs: obs, ev, accepted });
+      if (r.status === "human") return "stopped by human";
       if (accepted) { rec.status = "passed"; notes.push(`${name}: done. ${clip(r.summary, 160)}`); break; }
       feedback = ev.ok
         ? `\nYour previous attempt ended (${r.status}) without confirming the goal. Current state: ${digest(obs)}. Finish it and reply DONE.`
@@ -399,9 +622,28 @@ async function main() {
 
   const client = new Client({ name: "ollama-agent", version: "0.0.1" });
   await client.connect(new StdioClientTransport({ command: process.execPath, args: [path.join(HERE, "index.js")] }));
-  const tools = (await client.listTools()).tools
+  let tools = (await client.listTools()).tools
     .filter((t) => !a.exclude.includes(t.name))
     .map((t) => ({ type: "function", function: { name: t.name, description: t.description, parameters: t.inputSchema } }));
+  // The student (and the recorded/training prompts) use the compact list; in teacher mode Claude still sees the full
+  // MCP descriptions, but what is recorded is the student's view. `instance` is dropped from the compact schemas and
+  // injected by play() when --instance is given.
+  if (!a.fullTools) tools = compactTools(tools);
+
+  if (a.record) {
+    // Tool schemas are stored once per session (by hash) instead of in every episode.
+    a.toolsHash = sha(JSON.stringify(tools));
+    const snap = path.join(path.dirname(a.record), `tools-${a.toolsHash.slice(7)}.json`);
+    fs.mkdirSync(path.dirname(a.record), { recursive: true });
+    if (!fs.existsSync(snap)) fs.writeFileSync(snap, JSON.stringify(tools, null, 2) + "\n");
+    say(`recording trajectories (${a.actor}, ${a.fullTools ? "full" : "compact"} tools) to ${a.record}`);
+  }
+
+  if (a.teacher) {
+    // Empty cwd so Claude Code loads no project CLAUDE.md or settings; it only gets the mc-bridge tools.
+    a.teacherCwd = fs.mkdtempSync(path.join(os.tmpdir(), "mc-teacher-"));
+    say(`teacher mode: Claude Code (${a.teacherModel}) plays, using its own login (ANTHROPIC_API_KEY is not passed on)`);
+  }
 
   const state = { stop: false, total: 0 };
   process.on("SIGINT", () => { if (state.stop) process.exit(130); state.stop = true; say("Ctrl+C: stopping after this step"); });
